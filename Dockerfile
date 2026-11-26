@@ -22,4 +22,4 @@ ENV PORT=8080
 RUN mkdir -p /app/outputs /app/cache
 
 EXPOSE 8080
-CMD ["sh", "-c", "uvicorn pipeline.worker:app --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD ["python", "main.py"]

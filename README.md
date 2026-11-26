@@ -76,7 +76,7 @@ Root `.env` (worker): `GEMINI_API_KEY`, Cloudflare keys, same `WORKER_SECRET`.
 ### Deploy
 
 1. **Worker (Railway)** — deploy from **repo root** (not `web/`).
-   - In Railway service settings, set builder to **Dockerfile** (uses root `Dockerfile`), *or* keep Railpack and rely on `Procfile` / `railpack.toml` start command: `uvicorn pipeline.worker:app --host 0.0.0.0 --port $PORT`.
+   - Start command must be `python main.py` (do **not** put `${PORT:-8080}` in the Railway UI — clear any Custom Start Command so `railpack.json` / `Procfile` apply).
    - Install/system: FFmpeg must be available (Dockerfile already installs it).
    - Env vars: `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TTS_MODEL`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`, `WORKER_SECRET`, `SHOT_BACKEND=kenburns`, `PYTHONPATH=/app` (or `.` for Railpack).
    - Note the public URL (e.g. `https://….up.railway.app`).

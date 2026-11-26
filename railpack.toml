@@ -1,7 +1,3 @@
-# Used if Railway builds with Railpack instead of Docker.
+# Prefer railpack.json. Kept in sync for tools that still read TOML.
 [deploy]
-startCommand = "uvicorn pipeline.worker:app --host 0.0.0.0 --port ${PORT:-8080}"
-
-[build]
-# FFmpeg is required for Ken Burns + assemble. Prefer Dockerfile when possible.
-aptPackages = ["ffmpeg"]
+startCommand = "python main.py"
