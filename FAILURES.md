@@ -16,5 +16,6 @@
 | Script validation: Gemini returned music without `caption` | Schema required `caption` + `duration_sec` | `normalize_storyboard` fills `caption`; hand-authored `storyboard.json` remains source of truth for showcase |
 | Script validation: Gemini `end_card` as `{title, subtitle}` (sometimes `duration_sec` > 5) | Schema requires `{text, duration_sec}` 1–5 | `normalize_end_card` in `pipeline/common.py`; always runs inside `validate_storyboard` |
 | Deploy Quick Test: `storyline` &lt; 20 chars | Older worker `min_length=20` | Vercel sends embedded `DEMO_STORYBOARD` + ≥20-char `DEMO_STORYLINE`; worker accepts `demo=true` first |
+| Deploy Quick Test: `shots` minItems (1 shot vs schema 6) | Stale worker schema still had `minItems: 6` | Demo board now has 6×3s shots; `normalize_storyboard` pads thin boards to 6; validate relaxes `minItems` to 1 |
 | Gemini TTS 429 / quota on deploy | Interactions TTS path flaky under free tier | Edge TTS male English fallback in narration stage |
 | Vercel alone cannot run FFmpeg pipeline | Assumed serverless film gen | Split: Vercel UI + remote worker (`WORKER_URL` / `WORKER_SECRET`) |
