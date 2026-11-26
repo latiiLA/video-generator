@@ -1,0 +1,153 @@
+{
+  "title": "The Summer I Discovered Another World",
+  "logline": "In Grade Seven, a first visit to grandfather's countryside becomes a discovery of rain, land, gojo nights, fresh milk—and a way of seeing the world that never leaves.",
+  "language": "en",
+  "subtitle_language": "am",
+  "audience": "Family who know this grandfather's place, and friends who grew up only in the city—watching on a phone, remembering how a visit can change you.",
+  "intent": "Feel the wonder of that first countryside summer—and understand that the most beautiful journeys can be the ones that take us back to where we learned to see.",
+  "style_block": "warm grainy hand-painted look, Ethiopian highland countryside earth tones, soft rainy greens and firelight gold, gentle film grain, no text in image, consistent Grade-Seven visitor face across shots, cinematic framing for wide landscape and vertical phone crop, authentic Horn of Africa / Ethiopian facial features and skin tones for every person, NOT South Asian, NOT Indian, NOT East Asian appearance",
+  "character": {
+    "name": "The grandchild",
+    "description": "Ethiopian boy around twelve or thirteen (Grade Seven), Horn of Africa facial features, deep brown skin, tightly curled short black hair, dark expressive eyes, high cheekbones, slender build, simple cotton clothes, often barefoot or dusty from rural paths, clearly Ethiopian not Indian or South Asian",
+    "reference_image": null
+  },
+  "tts": {
+    "voice": "Fenrir",
+    "style": "warm, nostalgic, unhurried, intimate storytelling, as if remembering aloud, adult male narrator"
+  },
+  "music": {
+    "caption": "gentle instrumental underscore, soft plucked strings and warm pads, slow heartbeat rhythm, countryside rain then firelight intimacy, hopeful resolve, no vocals, room for narration",
+    "duration_sec": 90,
+    "tempo_bpm": 66,
+    "instrumental": true,
+    "cues": [
+      { "at_sec": 0, "note": "quiet arrival into another world" },
+      { "at_sec": 20, "note": "rain and land widen" },
+      { "at_sec": 45, "note": "gojo warmth and milk" },
+      { "at_sec": 70, "note": "memory resolve" }
+    ]
+  },
+  "end_card": {
+    "text": "Made with AI · The Summer I Discovered Another World",
+    "duration_sec": 3
+  },
+  "shots": [
+    {
+      "id": "shot_01",
+      "duration_sec": 9,
+      "reason": "Open on the visit—Grade Seven, first time, thinking it is ordinary.",
+      "shot_size": "medium",
+      "image_prompt": "Wide cinematic view of a Grade Seven Ethiopian boy with Horn of Africa features, deep brown skin, short tightly curled black hair, small bag, arriving on a rural highland path toward distant thatched gojo houses, late afternoon light, curious hesitant posture, countryside ahead, space on left and right for landscape framing, not Indian features",
+      "motion_prompt": "slow gentle push-in as the visitor walks toward the homesteads",
+      "narration": "I was in Grade Seven when I first visited my grandfather's home in the countryside. I thought it was only a visit. I had no idea I was about to discover a whole new world.",
+      "narration_en": "I was in Grade Seven when I first visited my grandfather's home in the countryside. I thought it was only a visit. I had no idea I was about to discover a whole new world.",
+      "narration_am": "በሰባተኛ ክፍል ነበርኩ ለመጀመሪያ ጊዜ የአያቴን የገጠር ቤት ስጎበኝ። ጉብኝት ብቻ ነው ብዬ አሰብኩ። ሙሉ አዲስ ዓለም እንደማገኝ አላወቅኩም።",
+      "seed": 601,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_02",
+      "duration_sec": 9,
+      "reason": "Reveal the other world—endless greenery and open farmland.",
+      "shot_size": "extreme_wide",
+      "image_prompt": "Extreme wide cinematic Ethiopian highland countryside: endless greenery, beautiful farmland plots, trees swaying in breeze, open highland spaces with no end, soft golden light, distant gojo roofs, horizon left to right, no close faces dominating",
+      "motion_prompt": "very slow pan across the farmland and open green spaces",
+      "narration": "Everything was different. The moment I arrived, endless greenery surrounded me—farmland, trees in the breeze, and open spaces that seemed to have no end. I had never experienced anything quite like it.",
+      "narration_en": "Everything was different. The moment I arrived, endless greenery surrounded me—farmland, trees in the breeze, and open spaces that seemed to have no end. I had never experienced anything quite like it.",
+      "narration_am": "ሁሉም ነገር የተለየ ነበር። በደረስኩበት ጊዜ ማያልቅ አረንጓዴ ከበበኝ—የእርሻ ቦታዎች፣ በንፋስ የሚወዛወዙ ዛፎች፣ መጨረሻ የሌላቸው ክፍት ቦታዎች። እንደዚህ ያለ ነገር ከዚህ በፊት አላጋጠመኝም።",
+      "seed": 602,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_03",
+      "duration_sec": 9,
+      "reason": "Summer rain—the land feels alive and different.",
+      "shot_size": "wide",
+      "image_prompt": "Wide summer rain over rural Ethiopian highland farmland, darkening sky, raindrops on green fields, wet earth paths, soft grey light, peaceful living landscape stretching wide, no text",
+      "motion_prompt": "slow drift through falling rain over the fields, soft rainfall",
+      "narration": "Then came the summer rain. The sky slowly grew dark, the wind carried the scent of wet earth, and raindrops fell over the fields. Even the rain felt different there—peaceful, beautiful, alive.",
+      "narration_en": "Then came the summer rain. The sky slowly grew dark, the wind carried the scent of wet earth, and raindrops fell over the fields. Even the rain felt different there—peaceful, beautiful, alive.",
+      "narration_am": "ከዚያ የበጋ ዝናብ መጣ። ሰማዩ ቀስ በቀስ ጨለመ፣ ንፋሱ የእርጥብ መሬት ሽታ አመጣ፣ የዝናብ ጠብታዎች በእርሻው ላይ ወረዱ። ዝናቡም እንኳ እዚያ የተለየ ነበር—ሰላማዊ፣ ውብ፣ ሕያው።",
+      "seed": 603,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_04",
+      "duration_sec": 9,
+      "reason": "Work and animals—another rhythm of life from the land.",
+      "shot_size": "wide",
+      "image_prompt": "Wide early morning rural Ethiopian highland work: Ethiopian farmers with Horn of Africa features tending farmland with hands and tools, animals nearby, oxen or cattle at edge of field, highland mist, Ethiopian child watching from a path, soft morning light, landscape composition, not Indian or South Asian faces",
+      "motion_prompt": "slow pan across people working the land and caring for animals",
+      "narration": "And then there was the work. I saw another rhythm of life—people waking early, tending land, caring for animals, working with their hands. There was something special about seeing how much of everyday life came directly from the land.",
+      "narration_en": "And then there was the work. I saw another rhythm of life—people waking early, tending land, caring for animals, working with their hands. There was something special about seeing how much of everyday life came directly from the land.",
+      "narration_am": "ከዚያም ሥራው ነበር። የሌላ የሕይወት ምት አየሁ—ሰዎች ጠዋት መነሳት፣ መሬት መንከባከብ፣ እንስሳት መመገብ፣ በእጅ መሥራት። የዕለት ኑሮ ብዙው ከመሬቱ እንደሚመጣ ማየት ልዩ ነበር።",
+      "seed": 604,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_05",
+      "duration_sec": 10,
+      "reason": "Gojo nights—potatoes, fire, family talk; nothing fancy, everything true.",
+      "shot_size": "medium",
+      "image_prompt": "Inside a traditional Ethiopian gojo at night, Ethiopian family with Horn of Africa features gathered around fire, large pot of potatoes cooking, warm orange firelight on deep brown faces, Ethiopian child among elders, intimate togetherness, room visible left to right, not Indian features, no text",
+      "motion_prompt": "gentle push-in on the fire circle and cooking pot, soft flame flicker",
+      "narration": "As evening arrived, we gathered inside my grandfather's traditional gojo house. I still remember those nights. A big pot of potatoes cooking over the fire. The warmth of the room. The conversations around us. Nothing fancy—just family, food, and togetherness.",
+      "narration_en": "As evening arrived, we gathered inside my grandfather's traditional gojo house. I still remember those nights. A big pot of potatoes cooking over the fire. The warmth of the room. The conversations around us. Nothing fancy—just family, food, and togetherness.",
+      "narration_am": "ማታ በአያቴ ባህላዊ ጎጆ ተሰባሰብን። እነዚያን ሌሊቶች አሁንም አስታውሳለሁ። በእሳቱ ላይ ትልቅ የድንች ድስት። የክፍሉ ሙቀት። ውይይቶች በዙሪያችን። ምንም የተራቀቀ አይደለም—ቤተሰብ፣ ምግብ እና አብሮነት ብቻ።",
+      "seed": 605,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_06",
+      "duration_sec": 7,
+      "reason": "Fresh milk—a small countryside miracle remembered in the body.",
+      "shot_size": "close_up",
+      "image_prompt": "Close-up of fresh milk poured into a simple cup in a rural Ethiopian highland kitchen or gojo doorway, soft morning light, wooden stool, deep brown hands of an Ethiopian elder pouring, countryside feel, no text",
+      "motion_prompt": "slow gentle drift on the cup as milk is poured",
+      "narration": "And the fresh milk! I can still remember how special it felt to drink milk straight from the countryside.",
+      "narration_en": "And the fresh milk! I can still remember how special it felt to drink milk straight from the countryside.",
+      "narration_am": "እና ትኩስ ወተቱ! ከገጠር በቀጥታ ወተት መጠጣት ምን ያህል ልዩ እንደሚሰማ አሁንም አስታውሳለሁ።",
+      "seed": 606,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_07",
+      "duration_sec": 8,
+      "reason": "Mornings as adventure—ordinary days becoming memory.",
+      "shot_size": "medium",
+      "image_prompt": "Morning light on a rural path beside farmland, Grade Seven Ethiopian boy with Horn of Africa features exploring barefoot near gojo houses, deep brown skin, short curly black hair, dew on grass, soft highland sunrise, sense of new discovery each day, wide ambient countryside, not Indian appearance",
+      "motion_prompt": "slow tracking beside the child along the morning path",
+      "narration": "Every little thing became an adventure. Every morning brought something new. Every experience left a new memory.",
+      "narration_en": "Every little thing became an adventure. Every morning brought something new. Every experience left a new memory.",
+      "narration_am": "እያንዳንዱ ትንሽ ነገር ጀብዱ ሆነ። እያንዳንዱ ጠዋት አዲስ ነገር አመጣ። እያንዳንዱ ተሞክሮ አዲስ ትውስታ ትቶ ሄደ።",
+      "seed": 607,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_08",
+      "duration_sec": 9,
+      "reason": "What the visit gave—simple living, land, joy in ordinary moments.",
+      "shot_size": "medium",
+      "image_prompt": "Ethiopian grandfather with Horn of Africa features and Grade Seven Ethiopian grandchild standing together outside a gojo at soft dusk, deep brown skin, wide farmland behind them, quiet highland sky, tender teaching moment, cinematic wide framing, clearly Ethiopian not Indian or South Asian",
+      "motion_prompt": "very slow pull-back revealing the gojo and land behind them",
+      "narration": "I went there as a Grade Seven student, thinking I was just visiting my grandfather. But I came away with something much bigger. I discovered the beauty of simple living, the connection between people and the land, and the happiness hidden in ordinary moments.",
+      "narration_en": "I went there as a Grade Seven student, thinking I was just visiting my grandfather. But I came away with something much bigger. I discovered the beauty of simple living, the connection between people and the land, and the happiness hidden in ordinary moments.",
+      "narration_am": "እንደ ሰባተኛ ክፍል ተማሪ ሄጄ ነበር፣ አያቴን ለመጎብኘት ብቻ ብዬ አስቤ። ግን ከጉብኝት በላይ ይዤ ተመለስኩ። የቀላል ኑሮ ውበትን፣ የሰውና የመሬት ትስስርን፣ በተራ ጊዜያት የተደበቀ ደስታን አገኘሁ።",
+      "seed": 608,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_09",
+      "duration_sec": 10,
+      "reason": "Close on lasting gift—years pass; the summer stays; journeys that take us back.",
+      "shot_size": "medium_close",
+      "image_prompt": "Quiet night firelight reflected softly, memory mood inside Ethiopian gojo, warm embers, Grade Seven Ethiopian boy remembering with Horn of Africa features, deep brown skin, soft bokeh flames, intimate stillness with ambient room width, not Indian features",
+      "motion_prompt": "slow Ken Burns drift into the firelight memory",
+      "narration": "Years have passed, but that summer never really left me. Sometimes the most beautiful journeys are not the ones that take us far away. They are the ones that take us back to where we first learned to appreciate the world.",
+      "narration_en": "Years have passed, but that summer never really left me. Sometimes the most beautiful journeys are not the ones that take us far away. They are the ones that take us back to where we first learned to appreciate the world.",
+      "narration_am": "ዓመታት አለፉ፣ ያ የበጋ ወቅት ግን አልለየኝም። አንዳንድ ጊዜ ውብ ጉዞዎች ሩቅ የሚወስዱት አይደሉም—ዓለምን ማድነቅ የተማርንበት ወደ ተመለስንበት የሚመልሱት ናቸው።",
+      "seed": 609,
+      "shot_backend": "kenburns"
+    }
+  ]
+}

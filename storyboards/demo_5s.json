@@ -1,0 +1,44 @@
+{
+  "title": "5-Second Quick Test",
+  "logline": "A tiny countryside memory clip used to verify the Heritage Short pipeline from the UI.",
+  "language": "en",
+  "subtitle_language": "am",
+  "audience": "Developers and reviewers testing the generate UI end-to-end.",
+  "intent": "Prove narration, captions, motion, score, and dual-aspect export work in about five seconds.",
+  "style_block": "warm grainy hand-painted look, Ethiopian highland countryside earth tones, soft golden light, gentle film grain, no text in image, authentic Horn of Africa / Ethiopian facial features, NOT South Asian, NOT Indian appearance",
+  "character": {
+    "name": "The grandchild",
+    "description": "Ethiopian boy around twelve, Horn of Africa facial features, deep brown skin, tightly curled short black hair, simple cotton clothes, standing on a rural highland path",
+    "reference_image": null
+  },
+  "tts": {
+    "voice": "Fenrir",
+    "style": "warm, clear, unhurried, adult male narrator"
+  },
+  "music": {
+    "caption": "gentle soft plucked strings, warm pad, sparse and quiet under narration, no vocals",
+    "duration_sec": 30,
+    "tempo_bpm": 70,
+    "instrumental": true,
+    "cues": [{ "at_sec": 0, "note": "quiet open" }]
+  },
+  "end_card": {
+    "text": "Made with AI · Quick Test",
+    "duration_sec": 2
+  },
+  "shots": [
+    {
+      "id": "shot_01",
+      "duration_sec": 5,
+      "reason": "Single establishing beat for a five-second UI demo.",
+      "shot_size": "wide",
+      "image_prompt": "Wide cinematic Ethiopian highland farmland at soft dusk, distant thatched gojo roofs, Grade Seven Ethiopian boy with Horn of Africa features small on a rural path, deep brown skin, short curly black hair, golden light, not Indian features",
+      "motion_prompt": "slow gentle push-in across the highland path",
+      "narration": "I thought it was only a visit. That summer at my grandfather's place taught me to see the land.",
+      "narration_en": "I thought it was only a visit. That summer at my grandfather's place taught me to see the land.",
+      "narration_am": "ጉብኝት ብቻ ነው ብዬ አሰብኩ። ያ የበጋ ወቅት በአያቴ ቦታ መሬቱን ማየት አስተማረኝ።",
+      "seed": 701,
+      "shot_backend": "kenburns"
+    }
+  ]
+}

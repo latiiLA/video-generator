@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { formatError } from "@/lib/errors";
 import { workerConfig } from "@/lib/worker";
 
 export const runtime = "nodejs";
@@ -18,14 +19,14 @@ export async function GET(
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
       return NextResponse.json(
-        { error: data.detail || "Not found" },
+        { error: formatError(data.detail || data.error || data, "Not found") },
         { status: res.status },
       );
     }
     return NextResponse.json(data);
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Worker unreachable" },
+      { error: formatError(err, "Worker unreachable") },
       { status: 502 },
     );
   }

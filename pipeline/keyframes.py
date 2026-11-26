@@ -107,10 +107,28 @@ def generate_flux(prompt: str, seed: int | None, out: Path) -> dict:
     return {"path": out, "placeholder": False}
 
 
+_ETHIOPIAN_FACE_GUARD = (
+    "All people must have authentic Ethiopian / Horn of Africa facial features "
+    "and skin tones. Do not depict Indian, South Asian, East Asian, or European faces."
+)
+
+
 def full_prompt(sb: dict, shot: dict) -> str:
+    """Build the image prompt. Do not force the character into every wide plate —
+    that turned establishing Wallaga landscapes into child portraits and muddied story identity.
+    """
+    size = (shot.get("shot_size") or "").strip()
+    base = shot["image_prompt"].rstrip(".")
+    style = sb["style_block"]
+    if size in {"extreme_wide", "wide", "insert"}:
+        return (
+            f"{base}. Style: {style}. "
+            "Prefer place and action over a single face filling the frame. "
+            f"{_ETHIOPIAN_FACE_GUARD}"
+        )
     return (
-        f"{shot['image_prompt']}. Character: {sb['character']['description']}. "
-        f"Style: {sb['style_block']}."
+        f"{base}. Character: {sb['character']['description']}. "
+        f"Style: {style}. {_ETHIOPIAN_FACE_GUARD}"
     )
 
 

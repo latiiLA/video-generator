@@ -1,17 +1,25 @@
-# GPU notebooks
+# GPU notebooks (Wan + ACE-Step)
 
-## Wan 2.2 (moving shots)
+The brief’s free GPU path. Local `make film` defaults to Ken Burns + procedural music so a clean clone still finishes; use these notebooks when you have Kaggle/Colab quota.
 
-1. Open a Kaggle notebook with GPU (2× T4).
-2. Load Wan 2.2 TI2V-5B.
-3. For each keyframe in `outputs/keyframes/shot_XX.png`, generate a short clip with the shot’s `motion_prompt`.
-4. Export to `outputs/shots/external/shot_XX_wan.mp4`.
-5. Re-run `make shots` (or `make film`). The shots stage will pick up external clips before falling back to Ken Burns.
+## Wan 2.2 TI2V-5B (moving shots)
 
-## ACE-Step 1.5 (music)
+1. Phone-verify Kaggle; open a GPU notebook (2× T4).
+2. Load Wan 2.2 TI2V-5B (see model card: https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B).
+3. Upload `outputs/keyframes/shot_XX.png` and the shot’s `motion_prompt` from `storyboard.json` (motion/camera only).
+4. Draft at 480p if quota is tight; finish chosen shots at 720p.
+5. Export `shot_XX_wan.mp4` into `outputs/shots/external/`.
+6. `make shots` then `make film` — external clips win over Ken Burns.
+7. Log wall time and GPU minutes in `COSTS.md`; failures in `FAILURES.md`.
 
-1. Generate 3 instrumental candidates from the storyboard `music.caption`.
-2. Drop chosen `.wav` files into `outputs/music/candidates/`.
-3. Re-run `make music`.
+## ACE-Step 1.5 (score)
 
-Record latency and GPU minutes in `COSTS.md` and failures in `FAILURES.md`.
+1. Use storyboard `music.caption`, `tempo_bpm`, `duration_sec`, `instrumental: true`.
+2. Generate **three** candidates; listen under narration at low volume.
+3. Drop the chosen `.wav` (and optionally runners-up) into `outputs/music/candidates/`.
+4. `make music` then `make film`.
+5. Record why you picked the winner in `EXPERIMENTS.md`.
+
+## Why Ken Burns / procedural bed may still be in the submitted film
+
+GPU queue, session timeouts, or time-to-deadline. The brief allows animating keyframes with pan-zoom and still counting a narrated, scored, subtitled sequence as a film. Prefer Wan/ACE-Step when quota allows; keep fallbacks so `make film` never hard-depends on a live GPU.

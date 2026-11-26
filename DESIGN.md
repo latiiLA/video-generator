@@ -2,33 +2,51 @@
 
 ## Audience
 
-Family members in the diaspora and cousins who never saw Dessie’s market at dawn—people who watch on a phone, often vertical, late at night.
+Family who know this grandfather’s countryside home, and friends who grew up only in the city—people watching on a phone who should feel how a “simple visit” can open another world.
 
 ## Intent
 
-When the film ends, they should feel close to grandmother’s ordinary courage and understand that home travels in small rituals (the walk, the basket, the proverb).
+Feel the wonder of that Grade Seven summer—and understand that the most beautiful journeys can be the ones that take us back to where we first learned to see.
 
 ## Film
 
-**Working title:** The Market Walk  
-**Logline:** A granddaughter remembers how her grandmother walked to the Saturday market in Dessie, carrying more than goods—carrying the rhythm of home.
+**Working title:** The Summer I Discovered Another World  
+**Source:** Personal childhood essay (grandparents’ countryside; not the Kumsa Moroda history piece).  
+**Logline:** In Grade Seven, a first visit to grandfather’s countryside becomes a discovery of rain, land, gojo nights, fresh milk—and a way of seeing that never leaves.
 
-## Shot reasons
+**Language:** English narration; English + Afaan Oromo + Amharic burned-in subtitles.  
+**Length plan:** 9 shots + 3s end card ≈ 75–85s (meets 60–90s).
 
-See `reason` on each shot in `storyboard.json`. Every shot exists to establish place, introduce her, show the ritual walk, intimate hands, the market world, trade-as-connection, proverb inheritance, or memory reaching the next generation.
+## Chronology (every shot has a reason)
+
+| Shot | Reason |
+|------|--------|
+| 1 Arrival as Grade Seven | Thought it was only a visit |
+| 2 Endless greenery | The other world appears |
+| 3 Summer rain | The land feels alive and different |
+| 4 Work & animals | Another rhythm; life from the earth |
+| 5 Gojo night | Potatoes, fire, family—simple togetherness |
+| 6 Fresh milk | A small countryside miracle |
+| 7 Morning adventure | Ordinary days become memory |
+| 8 What I carried | Simple living, land, ordinary joy |
+| 9 Years later | The summer stays; journeys that take us back |
+
+## Separated from Kumsa Moroda
+
+`storyboards/kumsa_moroda.json` is a different film (public history / Nekemte leader). This storyboard is only the personal grandparents summer. Active contract: `storyboard.json` ← `wallaga_summer.json`.
 
 ## User test 1 — radio cut
 
-- **Date:** _TBD_
-- **Prototype:** narration over placeholder music on black (`make radio`)
-- **Participants (≥3):** _names_
-- **What they said:** _notes_
-- **What we changed in the storyboard:** _edits_
+- **Date:** _fill after `make radio`_
+- **Prototype:** `outputs/film/radio_cut.mp4`
+- **Participants (≥3):** _
+- **What they said:** _
+- **What we changed:** _
 
 ## User test 2 — near-final cut
 
-- **Date:** _TBD_
-- **Prototype:** picture + score + subs
-- **Participants (≥3):** _names_
-- **What they said:** _notes_
-- **What we changed:** _edits_
+- **Date:** _fill after `make film`_
+- **Prototype:** `outputs/film/final_9x16.mp4`
+- **Participants (≥3):** _
+- **What they said:** _
+- **What we changed:** _

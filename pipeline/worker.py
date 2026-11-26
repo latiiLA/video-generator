@@ -11,7 +11,7 @@ from typing import Any
 
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import FileResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from pipeline import assemble, config, keyframes, music, narration, script, shots
 from pipeline.common import load_storyboard, write_json
@@ -23,10 +23,68 @@ JOBS_ROOT = config.ROOT / "outputs" / "jobs"
 
 
 class JobRequest(BaseModel):
-    storyline: str = Field(min_length=20, max_length=4000)
-    language: str = "am"
+    """Accept a prose storyline and/or a full storyboard.json object.
+
+    Pasting storyboard.json into the UI used to 422 because storyline maxed at 4000
+    chars (~8k for our contract). Storyboard-only jobs are valid.
+    Set ``demo=True`` for the ~5s UI quick-test storyboard.
+    """
+
+    storyline: str | None = Field(default=None, max_length=20000)
+    language: str = "en"
     job_id: str | None = None
     storyboard: dict[str, Any] | None = None
+    demo: bool = False
+
+    @field_validator("storyline", mode="before")
+    @classmethod
+    def _empty_storyline_to_none(cls, value: Any) -> Any:
+        if value is None:
+            return None
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
+
+    @model_validator(mode="after")
+    def _coerce_storyboard_paste(self) -> JobRequest:
+        # If the client pasted storyboard JSON into `storyline`, lift it into `storyboard`.
+        if self.storyboard is None and self.storyline:
+            text = self.storyline.strip()
+            if text.startswith("{") and '"shots"' in text:
+                try:
+                    parsed = json.loads(text)
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"storyline looks like JSON but failed to parse: {exc}") from exc
+                if isinstance(parsed, dict) and isinstance(parsed.get("shots"), list):
+                    self.storyboard = parsed
+                    self.storyline = str(
+                        parsed.get("logline") or parsed.get("title") or "storyboard.json"
+                    )
+                    if not self.language or self.language == "en":
+                        self.language = str(parsed.get("language") or self.language or "en")
+
+        if self.demo and self.storyboard is None:
+            demo_path = config.ROOT / "storyboards" / "demo_5s.json"
+            self.storyboard = json.loads(demo_path.read_text(encoding="utf-8"))
+            self.storyline = str(
+                self.storyboard.get("logline")
+                or self.storyboard.get("title")
+                or "5-second quick test"
+            )
+            self.language = str(self.storyboard.get("language") or self.language or "en")
+
+        if self.storyboard is None and (not self.storyline or len(self.storyline.strip()) < 20):
+            raise ValueError(
+                "Provide a storyline (≥20 chars), demo=true, or a full storyboard object / JSON paste"
+            )
+
+        if self.storyboard is not None and (not self.storyline or len(self.storyline.strip()) < 20):
+            self.storyline = str(
+                self.storyboard.get("logline")
+                or self.storyboard.get("title")
+                or "storyboard-driven job"
+            )
+        return self
 
 
 class JobStatus(BaseModel):
