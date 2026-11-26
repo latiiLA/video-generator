@@ -289,7 +289,7 @@ export default function HomePage() {
           <section className="panel gen">
             <h3>Generate on this page</h3>
             <p className="lede">
-              Default is a 5-second Quick Test so you can verify the worker fast. Full Film uses your
+              Default is a short Quick Test (~18s) so you can verify the worker fast. Full Film uses your
               storyline. English male narration + Amharic captions.
             </p>
 
@@ -299,8 +299,8 @@ export default function HomePage() {
                 className={mode === "demo" ? "active" : ""}
                 onClick={() => setMode("demo")}
               >
-                <strong>Quick Test · 5s</strong>
-                <span>Default demo storyboard</span>
+                <strong>Quick Test</strong>
+                <span>6 short shots · smoke job</span>
               </button>
               <button
                 type="button"
@@ -336,7 +336,7 @@ export default function HomePage() {
               )}
               {mode === "demo" && (
                 <p className="hint">
-                  Uses <code>storyboards/demo_5s.json</code> — short English VO, Amharic captions.
+                  Uses the embedded demo storyboard — English VO, Amharic captions, Ken Burns.
                 </p>
               )}
               <button className="primary" type="submit" disabled={!canSubmit}>
