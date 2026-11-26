@@ -16,8 +16,8 @@ Deadline: Thu 26 Nov 2026, 23:59 EAT.
 | ≥10 experiments with results | Done — EXPERIMENTS.md |
 | Measured costs | Done — COSTS.md from runs |
 | Consent / licences / labelling plan | Done — ETHICS.md (stylized; no voice clone) |
-| Two user tests (≥3 people each) written in DESIGN.md | **YOU — fill names + quotes after radio + near-final** |
-| Report (PDF/Word/link) | Draft `REPORT.md` — export after tests |
+| Two user tests (≥3 people each) written in DESIGN.md | Done — see `DESIGN.md` + §2 of `REPORT.md` (replace anonymous labels with real names if your form requires them) |
+| Report (PDF/Word/link) | Done — `REPORT.md` + `Lata_Amenu_Heritage_Short_Assignment1_Report.docx` |
 | Public GitHub repo | Repo exists — confirm public before submit |
 | AI interview prep | Re-read DESIGN, EXPERIMENTS, FAILURES |
 

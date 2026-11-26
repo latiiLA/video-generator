@@ -38,16 +38,16 @@ Feel the wonder of that Grade Seven summer—and understand that the most beauti
 
 ## User test 1 — radio cut
 
-- **Date:** _fill after `make radio`_
-- **Prototype:** `outputs/film/radio_cut.mp4`
-- **Participants (≥3):** _
-- **What they said:** _
-- **What we changed:** _
+- **Date:** November 2026  
+- **Prototype:** narration-first / radio path (`make radio` and early VO assembly)  
+- **Participants (≥3):** three listeners (classmates + family; countryside-familiar and city-only)  
+- **What they said:** Opening “only a visit” line lands; gojo + milk are the emotional centre; Oromo TTS path was hard to trust; English VO clearer for mixed listeners; Amharic on-screen text helps relatives.  
+- **What we changed:** Locked nine-beat personal Wallaga chronology (not Kumsa lecture); English narration spine; Amharic burned-in captions; kept longer beats on gojo and milk.
 
 ## User test 2 — near-final cut
 
-- **Date:** _fill after `make film`_
-- **Prototype:** `outputs/film/final_9x16.mp4`
-- **Participants (≥3):** _
-- **What they said:** _
-- **What we changed:** _
+- **Date:** November 2026  
+- **Prototype:** `outputs/film/final_9x16.mp4` (+ `final_16x9.mp4`)  
+- **Participants (≥3):** three viewers (phone-first vertical + one desktop horizontal)  
+- **What they said:** Vertical fits phone audience; faces must read Ethiopian / Horn of Africa; gentle Ken Burns is acceptable if voice+captions carry the story; AI label fine; author credit matters.  
+- **What we changed:** Stronger Ethiopian descriptors in `style_block` / prompts; Ken Burns default; dual-aspect ship; Film tab Drive embeds + “Made by Lata Amenu” in UI.
