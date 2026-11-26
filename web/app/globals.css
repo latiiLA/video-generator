@@ -297,12 +297,17 @@ a {
   margin: 0 auto;
 }
 
-.player-wrap video {
+.player-wrap video,
+.player-wrap .drive-frame {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: contain;
+  border: 0;
   background: #000;
+}
+
+.player-wrap video {
+  object-fit: contain;
 }
 
 .player-empty {

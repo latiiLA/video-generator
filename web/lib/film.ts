@@ -22,7 +22,32 @@ export const FILM = {
   madeBy: "Made by Lata Amenu",
   madeWith: "Made with AI · Heritage Short pipeline",
   githubHint: "storyboard.json is the contract",
+  /** Final cuts hosted on Google Drive for the Film tab. */
+  drive: {
+    "16x9": {
+      id: "1O9E3UOstvCOU9xS06yQfT-I7v_iTPolZ",
+      label: "Horizontal 16:9",
+    },
+    "9x16": {
+      id: "1XPGSV9vY0ItxBp-kfuPQiDWo0pEcI19Q",
+      label: "Vertical 9:16",
+    },
+  },
 };
+
+export type AspectKey = keyof typeof FILM.drive;
+
+export function drivePreviewUrl(aspect: AspectKey): string {
+  return `https://drive.google.com/file/d/${FILM.drive[aspect].id}/preview`;
+}
+
+export function driveViewUrl(aspect: AspectKey): string {
+  return `https://drive.google.com/file/d/${FILM.drive[aspect].id}/view?usp=sharing`;
+}
+
+export function driveDownloadUrl(aspect: AspectKey): string {
+  return `https://drive.google.com/uc?export=download&id=${FILM.drive[aspect].id}`;
+}
 
 export const SHOTS: ShotChapter[] = [
   {

@@ -2,7 +2,14 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { formatError } from "@/lib/errors";
-import { FILM, PIPELINE_STAGES, SHOTS } from "@/lib/film";
+import {
+  FILM,
+  PIPELINE_STAGES,
+  SHOTS,
+  driveDownloadUrl,
+  drivePreviewUrl,
+  driveViewUrl,
+} from "@/lib/film";
 
 type Job = {
   id: string;
@@ -35,7 +42,6 @@ export default function HomePage() {
   const [job, setJob] = useState<Job | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [videoOk, setVideoOk] = useState(true);
 
   const shot = SHOTS[shotIdx];
   const activeIdx = useMemo(
@@ -51,13 +57,12 @@ export default function HomePage() {
     return Math.min(96, Math.round((activeIdx / (PIPELINE_STAGES.length - 1)) * 100));
   }, [job, activeIdx]);
 
-  const showcaseSrc = `/api/media/film?aspect=${aspect}`;
-  const jobSrc = job?.status === "ready" ? `/api/jobs/${job.id}/download?aspect=${aspect}` : null;
-  const videoSrc = jobSrc || showcaseSrc;
-
-  useEffect(() => {
-    setVideoOk(true);
-  }, [videoSrc]);
+  // Film tab always plays the Drive showcase cuts. Fresh job outputs stay available via Generate.
+  const drivePreview = drivePreviewUrl(aspect);
+  const driveView = driveViewUrl(aspect);
+  const driveDownload = driveDownloadUrl(aspect);
+  const jobSrc =
+    job?.status === "ready" ? `/api/jobs/${job.id}/download?aspect=${aspect}` : null;
 
   useEffect(() => {
     if (!job?.id || job.status === "ready" || job.status === "failed") return;
@@ -169,17 +174,17 @@ export default function HomePage() {
             <div className="aspect" role="group" aria-label="Aspect ratio">
               <button
                 type="button"
-                className={aspect === "9x16" ? "active" : ""}
-                onClick={() => setAspect("9x16")}
-              >
-                Vertical 9:16
-              </button>
-              <button
-                type="button"
                 className={aspect === "16x9" ? "active" : ""}
                 onClick={() => setAspect("16x9")}
               >
                 Horizontal 16:9
+              </button>
+              <button
+                type="button"
+                className={aspect === "9x16" ? "active" : ""}
+                onClick={() => setAspect("9x16")}
+              >
+                Vertical 9:16
               </button>
             </div>
             <button type="button" className="ghost" onClick={() => setTab("generate")}>
@@ -192,39 +197,47 @@ export default function HomePage() {
           <div className="layout-film">
             <section className="panel">
               <div className={`player-wrap ${aspect === "9x16" ? "vertical" : ""}`}>
-                {videoOk ? (
-                  <video
-                    key={videoSrc}
-                    src={videoSrc}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    onError={() => setVideoOk(false)}
-                  />
-                ) : (
-                  <div className="player-empty">
-                    <div>
-                      <strong>Film not loaded yet</strong>
-                      Run a Quick Test or Full Film from Generate, then come back here to watch.
-                    </div>
-                  </div>
-                )}
+                <iframe
+                  key={drivePreview}
+                  src={drivePreview}
+                  title={`${FILM.title} · ${FILM.drive[aspect].label}`}
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                  className="drive-frame"
+                />
               </div>
               <div className="player-bar">
                 <div className="cred">
-                  Watching {job?.status === "ready" ? `job ${job.id}` : "local showcase cut"} ·{" "}
-                  <b>{FILM.madeBy}</b>
+                  Watching Google Drive showcase · <b>{FILM.madeBy}</b>
                 </div>
                 <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                  <a className="link-btn" href={`${videoSrc}${videoSrc.includes("?") ? "&" : "?"}download=1`}>
+                  <a className="link-btn" href={driveView} target="_blank" rel="noreferrer">
+                    Open on Drive
+                  </a>
+                  <a className="link-btn" href={driveDownload} target="_blank" rel="noreferrer">
                     Download {aspect}
                   </a>
-                  <a className="link-btn" href={`/api/media/film?aspect=16x9&download=1`}>
-                    16:9 file
+                  <a
+                    className="link-btn"
+                    href={driveViewUrl("16x9")}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    16:9 on Drive
                   </a>
-                  <a className="link-btn" href={`/api/media/film?aspect=9x16&download=1`}>
-                    9:16 file
+                  <a
+                    className="link-btn"
+                    href={driveViewUrl("9x16")}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    9:16 on Drive
                   </a>
+                  {jobSrc && (
+                    <a className="link-btn" href={`${jobSrc}&download=1`}>
+                      Latest job file
+                    </a>
+                  )}
                 </div>
               </div>
             </section>
