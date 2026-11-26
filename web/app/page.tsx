@@ -342,10 +342,10 @@ export default function HomePage() {
               <button className="primary" type="submit" disabled={!canSubmit}>
                 {busy
                   ? mode === "demo"
-                    ? "Running 5s test…"
+                    ? "Running Quick Test…"
                     : "Generating…"
                   : mode === "demo"
-                    ? "Run 5-second test"
+                    ? "Run Quick Test"
                     : "Generate film"}
               </button>
             </form>
