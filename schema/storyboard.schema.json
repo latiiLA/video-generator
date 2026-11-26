@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://latiiLA.github.io/video-generator/schema/storyboard.schema.json",
+  "title": "HeritageShortStoryboard",
+  "type": "object",
+  "required": ["title", "logline", "language", "style_block", "character", "shots", "music", "end_card"],
+  "additionalProperties": false,
+  "properties": {
+    "title": { "type": "string", "minLength": 1 },
+    "logline": { "type": "string", "minLength": 1 },
+    "language": {
+      "type": "string",
+      "description": "Narration language code or name, e.g. am, en, om"
+    },
+    "subtitle_language": { "type": "string", "default": "en" },
+    "audience": { "type": "string" },
+    "intent": { "type": "string" },
+    "style_block": {
+      "type": "string",
+      "description": "Fixed look description appended to every image prompt"
+    },
+    "character": {
+      "type": "object",
+      "required": ["name", "description"],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "reference_image": { "type": ["string", "null"] }
+      }
+    },
+    "music": {
+      "type": "object",
+      "required": ["caption", "duration_sec"],
+      "properties": {
+        "caption": { "type": "string" },
+        "duration_sec": { "type": "number", "minimum": 30, "maximum": 120 },
+        "tempo_bpm": { "type": "integer" },
+        "instrumental": { "type": "boolean", "default": true },
+        "cues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["at_sec", "note"],
+            "properties": {
+              "at_sec": { "type": "number" },
+              "note": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "end_card": {
+      "type": "object",
+      "required": ["text", "duration_sec"],
+      "properties": {
+        "text": { "type": "string" },
+        "duration_sec": { "type": "number", "minimum": 1, "maximum": 5 }
+      }
+    },
+    "tts": {
+      "type": "object",
+      "properties": {
+        "voice": { "type": "string" },
+        "style": { "type": "string" }
+      }
+    },
+    "shots": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "duration_sec",
+          "reason",
+          "image_prompt",
+          "motion_prompt",
+          "narration",
+          "narration_en"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^shot_\\d{2}$" },
+          "duration_sec": { "type": "number", "minimum": 3, "maximum": 12 },
+          "reason": { "type": "string" },
+          "shot_size": {
+            "type": "string",
+            "enum": [
+              "extreme_wide",
+              "wide",
+              "medium",
+              "medium_close",
+              "close_up",
+              "extreme_close_up",
+              "insert"
+            ]
+          },
+          "image_prompt": { "type": "string" },
+          "motion_prompt": { "type": "string" },
+          "narration": { "type": "string" },
+          "narration_en": { "type": "string" },
+          "seed": { "type": ["integer", "null"] },
+          "shot_backend": {
+            "type": ["string", "null"],
+            "enum": ["wan", "hunyuan", "kenburns", null]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "title": "The Market Walk",
+  "logline": "A granddaughter remembers how her grandmother walked to the Saturday market in Dessie, carrying more than goods—carrying the rhythm of home.",
+  "language": "am",
+  "subtitle_language": "en",
+  "audience": "Family in the diaspora and cousins who never saw Dessie's market at dawn.",
+  "intent": "Feel closeness to grandmother's courage and ordinary beauty; understand that home is carried in small rituals.",
+  "style_block": "warm grainy hand-painted look, soft golden-hour light, muted earth tones, gentle film grain, no text in image, consistent character face",
+  "character": {
+    "name": "Etye Almaz",
+    "description": "Ethiopian grandmother in her sixties, grey-streaked hair wrapped in a soft white netela, kind tired eyes, weathered hands, simple cotton dress in deep ochre",
+    "reference_image": null
+  },
+  "tts": {
+    "voice": "Kore",
+    "style": "calm, warm, unhurried, respectful"
+  },
+  "music": {
+    "caption": "gentle instrumental underscore, soft krar-like plucked strings, warm pads, slow heartbeat rhythm, nostalgic and hopeful, no vocals, sparse melody under narration",
+    "duration_sec": 75,
+    "tempo_bpm": 72,
+    "instrumental": true,
+    "cues": [
+      { "at_sec": 0, "note": "quiet bed under opening" },
+      { "at_sec": 45, "note": "slight lift as market comes alive" },
+      { "at_sec": 70, "note": "resolve to soft fade" }
+    ]
+  },
+  "end_card": {
+    "text": "Made with AI · The Market Walk",
+    "duration_sec": 3
+  },
+  "shots": [
+    {
+      "id": "shot_01",
+      "duration_sec": 7,
+      "reason": "Establish place and hour before we meet her.",
+      "shot_size": "extreme_wide",
+      "image_prompt": "Dawn over the hills of Dessie Ethiopia, quiet dirt road leading toward a distant market, soft mist, warm golden light",
+      "motion_prompt": "slow gentle camera push-in, soft mist drifting, locked gentle motion",
+      "narration": "እሁድ ጥዋት፣ ደሴ ላይ፣ የገበያ መንገድ ይነሳል።",
+      "narration_en": "On a Sunday morning in Dessie, the road to market wakes first.",
+      "seed": 101,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_02",
+      "duration_sec": 7,
+      "reason": "Introduce grandmother as the film's heart.",
+      "shot_size": "medium",
+      "image_prompt": "Etye Almaz standing at her doorway wrapping a white netela, ochre dress, kind tired eyes, warm interior light",
+      "motion_prompt": "she slowly adjusts her shawl, camera holds steady, soft breeze",
+      "narration": "እቴ አልማዝ ጥዋት ላይ ቤቷን ትዘጋለች፣ ገበያ ትሄዳለች።",
+      "narration_en": "Etye Almaz closes her door at dawn and sets out for market.",
+      "seed": 102,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_03",
+      "duration_sec": 6,
+      "reason": "Show the walk as ritual, not hardship alone.",
+      "shot_size": "wide",
+      "image_prompt": "elderly Ethiopian woman walking a hillside path with a woven basket, eucalyptus trees, morning light on dust",
+      "motion_prompt": "slow tracking beside her steps, dust motes in light, gentle pace",
+      "narration": "መንገዱ ረጅም ነው፤ እግሮቿ ግን ምት ያውቃሉ።",
+      "narration_en": "The road is long, but her feet know the rhythm.",
+      "seed": 103,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_04",
+      "duration_sec": 6,
+      "reason": "Intimate detail—hands that carry the story.",
+      "shot_size": "close_up",
+      "image_prompt": "close-up of weathered grandmother hands holding a woven basket handle, warm light, shallow depth of field",
+      "motion_prompt": "subtle handheld breath, fingers tighten gently on the basket",
+      "narration": "ቅርጫቷ ባዶ ትመስላለች፤ ቤተሰብ ግን ሙሉ ነው።",
+      "narration_en": "Her basket looks empty; her family is already full in it.",
+      "seed": 104,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_05",
+      "duration_sec": 7,
+      "reason": "Arrive at the living market world.",
+      "shot_size": "wide",
+      "image_prompt": "busy open-air market in Dessie, spice sacks, cloth stalls, soft crowd, golden morning, grandmother approaching from edge of frame",
+      "motion_prompt": "slow pan across stalls, gentle ambient motion, she enters frame calmly",
+      "narration": "ገበያው ድምፅ አለው—ቅመም፣ ሳቅ፣ የሕይወት ጫጫታ።",
+      "narration_en": "The market has a voice—spice, laughter, the noise of living.",
+      "seed": 105,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_06",
+      "duration_sec": 6,
+      "reason": "Trade as connection, not transaction.",
+      "shot_size": "medium_close",
+      "image_prompt": "grandmother exchanging berbere spice with a market seller, both smiling softly, warm stall light",
+      "motion_prompt": "gentle push-in on their hands meeting, soft smile",
+      "narration": "ትደራደራለች፤ ግን የምትገዛው ምግብ ብቻ አይደለም።",
+      "narration_en": "She bargains, but she is buying more than food.",
+      "seed": 106,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_07",
+      "duration_sec": 6,
+      "reason": "Motif return—proverb as inheritance.",
+      "shot_size": "medium",
+      "image_prompt": "grandmother resting under a shade tree with full basket, soft smile, late morning light",
+      "motion_prompt": "slow tilt up from basket to her face, leaves stir lightly",
+      "narration": "እናቴ እንደምትለው—በዝግታ የሚሄድ አያልቅም።",
+      "narration_en": "As my mother still says—the one who walks slowly does not finish empty.",
+      "seed": 107,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_08",
+      "duration_sec": 7,
+      "reason": "Close on memory reaching the next generation.",
+      "shot_size": "medium_close",
+      "image_prompt": "grandmother silhouetted on the road home at soft dusk, hills of Dessie behind her, warm afterglow",
+      "motion_prompt": "slow pull-back revealing the hills, she walks away calmly",
+      "narration": "እኔ አሁን በርቀት ነኝ፤ እርሷ ግን በእያንዳንዱ እርምጃ አሁንም ትመራለች።",
+      "narration_en": "I live far away now, but she still leads me—step by step.",
+      "seed": 108,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_09",
+      "duration_sec": 6,
+      "reason": "Final feeling: inheritance as light, not only loss.",
+      "shot_size": "close_up",
+      "image_prompt": "close-up of a small brass coffee cup and a folded netela on a wooden table, warm lamp light, quiet home interior",
+      "motion_prompt": "very slow Ken Burns style drift across the objects, intimate stillness",
+      "narration": "ታሪኳ አሁን የእኛ ነው።",
+      "narration_en": "Her story is ours now.",
+      "seed": 109,
+      "shot_backend": "kenburns"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Node / Next.js
+web/node_modules/
+web/.next/
+web/out/
+web/.vercel/
+
+# Pipeline outputs (keep structure; ignore heavy media)
+outputs/**
+!outputs/.gitkeep
+!outputs/**/.gitkeep
+*.mp4
+*.wav
+*.mp3
+*.webm
+cache/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Local tool downloads
+tools/
+
+# Logs that may contain paths (runs.jsonl is committed when small)
+*.log
