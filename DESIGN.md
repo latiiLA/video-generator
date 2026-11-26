@@ -14,8 +14,9 @@ Feel the wonder of that Grade Seven summer—and understand that the most beauti
 **Source:** Personal childhood essay (grandparents’ countryside; not the Kumsa Moroda history piece).  
 **Logline:** In Grade Seven, a first visit to grandfather’s countryside becomes a discovery of rain, land, gojo nights, fresh milk—and a way of seeing that never leaves.
 
-**Language:** English narration; English + Afaan Oromo + Amharic burned-in subtitles.  
-**Length plan:** 9 shots + 3s end card ≈ 75–85s (meets 60–90s).
+**Language:** English male narration; Amharic burned-in captions (primary); English available in storyboard fields.  
+**Length plan:** 9 shots + ~3s end card ≈ 75–85s (meets 60–90s).  
+**Author credit:** Made by Lata Amenu.
 
 ## Chronology (every shot has a reason)
 

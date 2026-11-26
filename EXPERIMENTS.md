@@ -16,3 +16,5 @@ Hypothesis → change → result. Evidence in `runs.jsonl` unless noted.
 | 10 | Web “family tool” ceiling: relative pastes storyline → film | Next.js UI + FastAPI worker (Render) + Ken Burns default | Job create works when worker reachable; `[object Object]` UI bug fixed by stringifying FastAPI `detail` |
 | 11 | Gemini 3.8 Flash may 503 on free tier; lite models keep pipeline alive | Fallback chain `3.5-flash-lite → … → 3.8-flash`; TTS `3.8-flash-lite-tts` | Script/TTS recovered after 404/503 on older ids — see FAILURES |
 | 12 | Cloudflare FLUX rejects `seed` on this Workers AI route | Drop seed from request body; keep storyboard seed for logging/cache key only | Keyframes succeed (`flux-1-schnell` ~2.9s median) |
+| 13 | Gemini often returns `end_card` with `title`/`subtitle` instead of `text` | `normalize_end_card` inside `validate_storyboard` | Full Generate no longer fails schema on deploy for that shape |
+| 14 | Showcase UI needs a film even when worker is cold | Film tab embeds Drive 16:9 then 9:16; Generate uses worker | Viewers see the finished cut without waiting on Render wake |

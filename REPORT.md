@@ -1,10 +1,11 @@
-# Report — The Heritage Short (Summer in the Gojo)
+# Report — The Heritage Short (The Summer I Discovered Another World)
 
-*Submit this as PDF/Word or link for Assignment 1. Edit the bracketed bits after your two audience tests.*
+**Author:** Lata Amenu · **Credit:** Made by Lata Amenu  
+*Submit this as PDF/Word or link for Assignment 1. Edit the bracketed bits after your two audience tests. Full implementation map: `CONTRIBUTIONS.md`.*
 
 ## What I set out to make, and for whom
 
-A 60–90s film about one summer at my grandfather’s place in rural Wallaga: firelight in a gojo without electricity, mitmita potatoes, uncles on the land, a first horse, rain, and the ache that family lives far away. Audience: relatives who share that world, and friends who only know city life, watching on a phone. Intent: feel how precious those days were, and that memory keeps them near.
+A 60–90s film about one summer at my grandfather’s place in rural Wallaga: firelight in a gojo without electricity, potatoes cooking, uncles on the land, summer rain, fresh milk, and the feeling that ordinary days become memory. Audience: relatives who share that world, and friends who only know city life, watching on a phone. Intent: feel how precious those days were, and that the most beautiful journeys can be the ones that take us back.
 
 ## What I learned from the audience
 
@@ -16,7 +17,7 @@ Pre-audience iteration already in the repo: the first draft subject (public hist
 
 ## Hardest problem and how I solved it
 
-Keeping a reproducible multi-model pipeline running on free tiers when models, hosts, and APIs moved under us: Gemini model id 404s and 503s, Cloudflare FLUX rejecting `seed`, TTS API shape changes, Windows FFmpeg PATH, Railway failing to start the worker, and a web UI that rendered FastAPI errors as `[object Object]`. Fixes live in `FAILURES.md` and `runs.jsonl`: model fallback chains, Interactions TTS, Ken Burns as the honest motion floor, Render Docker for the worker, and proper error stringification.
+Keeping a reproducible multi-model pipeline running on free tiers when models, hosts, and APIs moved under us: Gemini model id 404s and 503s, Cloudflare FLUX rejecting `seed`, TTS API shape / quota changes, Windows FFmpeg PATH, Railway failing to start the worker, a web UI that rendered FastAPI errors as `[object Object]`, and Gemini storyboards that violated our schema (`end_card` as title/subtitle). Fixes live in `FAILURES.md` and `runs.jsonl`: model fallback chains, Edge TTS fallback, Ken Burns as the honest motion floor, Render Docker for the worker, storyboard normalization before validation, and proper error stringification.
 
 ## Suggested practice that beat my instinct
 
@@ -28,9 +29,10 @@ Keeping a reproducible multi-model pipeline running on free tiers when models, h
 
 ## Ceiling work
 
-1. **Family tool:** a small web app (`web/`) so a relative can paste a storyline and get a film back via a remote worker — not only a CLI.
-2. **Language probe:** Afaan Oromo attempted and measured as failure modes in FAILURES.md.
-3. **Deploy path:** Vercel UI + Render worker when “one machine” was not enough for the showcase.
+1. **Family / showcase tool:** Next.js app (`web/`) with Film playback (Drive 16:9 + 9:16), Generate from storyline, Quick Test, and live stage progress — not only a CLI.
+2. **Language path:** English male VO + Amharic burned-in captions for the shipped film; Afaan Oromo TTS attempted and measured as failure modes in `FAILURES.md`.
+3. **Deploy path:** Vercel UI + Render Docker worker when “one machine” was not enough for the showcase.
+4. **Dual native aspects:** true 16:9 and 9:16 exports from assemble (not a single master with crude letterbox-only thinking).
 
 ## What I would build next
 
@@ -40,11 +42,13 @@ Wire real Wan 2.2 and ACE-Step candidate batches from Kaggle into `outputs/shots
 
 | Claim | Where |
 |-------|--------|
-| Stages + cache | `ARCHITECTURE.md`, `pipeline/` |
+| Authorship / what I built | `CONTRIBUTIONS.md`, UI credit in `web/lib/film.ts` |
+| Stages + cache + deploy topology | `ARCHITECTURE.md`, `pipeline/` |
 | One command | `README.md`, `Makefile`, `scripts/run_film.ps1` |
+| Story / audience | `DESIGN.md`, `storyboards/wallaga_summer.json` |
 | Logs | `runs.jsonl` |
 | Experiments | `EXPERIMENTS.md` |
 | Failures | `FAILURES.md` |
 | Costs | `COSTS.md` |
 | Consent / licences | `ETHICS.md` |
-| Audience / tests | `DESIGN.md` |
+| Web + worker | `web/`, `pipeline/worker.py`, `Dockerfile` |

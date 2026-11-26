@@ -6,7 +6,7 @@ Film subject: a **personal family memory** (summer in rural Wallaga). Portrayal 
 
 | Person / subject | Likeness / voice used? | Consent recorded? | Notes |
 |------------------|------------------------|-------------------|-------|
-| Family memory (Wallaga summer) | Stylized AI scenes; Gemini TTS stock voice “Kore”, not a relative’s voice | Story told with family knowledge; no real face photo or voice clone used | If any real photo, name-as-likeness, or voice clone is added later, get informed consent **before** regenerate and record it in this table |
+| Family memory (Wallaga summer) | Stylized AI scenes; English male stock TTS (Gemini / Edge), not a relative’s voice | Story told with family knowledge; no real face photo or voice clone used | If any real photo, name-as-likeness, or voice clone is added later, get informed consent **before** regenerate and record it in this table |
 | Grandfather / uncles (depicted) | Generic elders in prompts, not identified real photos | Same as above | Do not upload private family photos to free endpoints |
 
 **Gate:** If a real person’s face or voice appears without consent here, the film must not be submitted (Assignment 2 scores zero).

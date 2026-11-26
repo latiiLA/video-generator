@@ -13,5 +13,8 @@
 | Storyboard vs outputs drift | `storyboard.json` updated to Wallaga while film/subs still Kumsa | Force regenerate narration → keyframes → shots → music → assemble from current contract |
 | Railway worker “no start command” / bad `${PORT}` | Railpack / Procfile / railway.toml variants | Moved worker to Render Docker (`Dockerfile` + `render.yaml`) |
 | Web UI showed `Error [object Object]` | FastAPI `detail` object passed to `Error()` | `formatError` in web lib + stringify in jobs API |
-| Script validation: Gemini returned music without `caption` | Schema required `caption` + `duration_sec` | Reject/retry; keep hand-authored `storyboard.json` as source of truth |
+| Script validation: Gemini returned music without `caption` | Schema required `caption` + `duration_sec` | `normalize_storyboard` fills `caption`; hand-authored `storyboard.json` remains source of truth for showcase |
+| Script validation: Gemini `end_card` as `{title, subtitle}` (sometimes `duration_sec` > 5) | Schema requires `{text, duration_sec}` 1–5 | `normalize_end_card` in `pipeline/common.py`; always runs inside `validate_storyboard` |
+| Deploy Quick Test: `storyline` &lt; 20 chars | Older worker `min_length=20` | Vercel sends embedded `DEMO_STORYBOARD` + ≥20-char `DEMO_STORYLINE`; worker accepts `demo=true` first |
+| Gemini TTS 429 / quota on deploy | Interactions TTS path flaky under free tier | Edge TTS male English fallback in narration stage |
 | Vercel alone cannot run FFmpeg pipeline | Assumed serverless film gen | Split: Vercel UI + remote worker (`WORKER_URL` / `WORKER_SECRET`) |

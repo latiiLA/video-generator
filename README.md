@@ -1,6 +1,10 @@
 # The Heritage Short — video generator
 
-One-command pipeline that turns `storyboard.json` into a 60–90s heritage short (vertical + horizontal), plus a small web app to paste a storyline and download a film.
+**Made by Lata Amenu** · 10 Academy · B2W0 Challenge
+
+One-command pipeline that turns `storyboard.json` into a 60–90s heritage short (vertical + horizontal), plus a showcase web app to watch the film, paste a storyline, and run a Quick Test.
+
+Film: *The Summer I Discovered Another World* (Wallaga childhood summer). Authorship, implementation map, and evidence: **`CONTRIBUTIONS.md`**.
 
 ## One command
 
@@ -31,7 +35,7 @@ Without API keys the pipeline still runs using placeholders (silent narration, d
 | Stage | Command | Model / tool |
 |-------|---------|--------------|
 | Validate / script | `make validate` / `python -m pipeline.script` | Gemini Flash |
-| Narration | `make narration` | Gemini TTS (or silent placeholder) |
+| Narration | `make narration` | Gemini TTS → Edge TTS (or silent placeholder) |
 | Keyframes | `make keyframes` | FLUX on Cloudflare (or Pillow placeholder) |
 | Shots | `make shots` | Wan → Hunyuan → **Ken Burns** (default) |
 | Music | `make music` | ACE-Step export or procedural bed |
@@ -99,8 +103,10 @@ Free-tier oriented. Measured latency and GPU minutes live in `COSTS.md` and `run
 
 ## Docs
 
-- `DESIGN.md` — audience, intent, user tests  
-- `ARCHITECTURE.md` — stages, caching, failure handling  
+- `CONTRIBUTIONS.md` — authorship, what was built, evidence map  
+- `ARCHITECTURE.md` — stages, caching, web/worker deploy topology  
+- `DESIGN.md` — audience, intent, chronology, user tests  
+- `REPORT.md` — assignment narrative (hardest problem, ceiling, next steps)  
 - `EXPERIMENTS.md` — hypothesis → change → result  
 - `FAILURES.md` — blockers and fixes  
 - `COSTS.md` — latency / cost notes  
