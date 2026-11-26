@@ -120,6 +120,7 @@ def build_picture_timeline(sb: dict, vertical: Path) -> None:
 
 
 def mix_audio(narr: Path, music: Path, out: Path) -> None:
+    # Normalize both to 48k mono first so silent/odd WAV rates don't wreck the mix
     _ffmpeg(
         "-i",
         str(narr),
@@ -128,12 +129,17 @@ def mix_audio(narr: Path, music: Path, out: Path) -> None:
         "-i",
         str(music),
         "-filter_complex",
-        "[1:a]volume=0.35[m];"
-        "[m][0:a]sidechaincompress=threshold=0.02:ratio=6:attack=300:release=1500[ducked];"
-        "[0:a][ducked]amix=inputs=2:duration=first:dropout_transition=2[mix];"
+        "[0:a]aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=mono,volume=2.0[voice];"
+        "[1:a]aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=mono,volume=0.25[musicbed];"
+        "[musicbed][voice]sidechaincompress=threshold=0.02:ratio=6:attack=300:release=1500[ducked];"
+        "[voice][ducked]amix=inputs=2:duration=first:dropout_transition=2[mix];"
         "[mix]loudnorm=I=-14:TP=-1.5:LRA=11[aout]",
         "-map",
         "[aout]",
+        "-ar",
+        "48000",
+        "-ac",
+        "1",
         "-c:a",
         "aac",
         "-b:a",

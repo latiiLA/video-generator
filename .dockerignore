@@ -1,0 +1,11 @@
+.venv
+web/node_modules
+web/.next
+cache
+outputs
+.git
+tools
+*.mp4
+*.wav
+.env
+web/.env.local

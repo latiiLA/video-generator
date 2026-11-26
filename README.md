@@ -54,13 +54,39 @@ make radio
 
 ## Web app (Vercel + worker)
 
+Vercel hosts the UI only. Film generation needs the Python worker (FFmpeg + Gemini + Cloudflare) on Railway or Render.
+
+### Local
+
 ```bash
 make web-install
 make web-dev          # Next.js on :3000
 make worker           # FastAPI worker on :8080
 ```
 
-Set `WORKER_URL=http://localhost:8080` and `WORKER_SECRET` in `web/.env.local` and root `.env`. Deploy `web/` to Vercel; host the worker on Railway/Render (FFmpeg required).
+`web/.env.local`:
+
+```env
+WORKER_URL=http://127.0.0.1:8080
+WORKER_SECRET=change-me
+```
+
+Root `.env` (worker): `GEMINI_API_KEY`, Cloudflare keys, same `WORKER_SECRET`.
+
+### Deploy
+
+1. **Worker (Railway)** — deploy from **repo root** (not `web/`).
+   - In Railway service settings, set builder to **Dockerfile** (uses root `Dockerfile`), *or* keep Railpack and rely on `Procfile` / `railpack.toml` start command: `uvicorn pipeline.worker:app --host 0.0.0.0 --port $PORT`.
+   - Install/system: FFmpeg must be available (Dockerfile already installs it).
+   - Env vars: `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TTS_MODEL`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`, `WORKER_SECRET`, `SHOT_BACKEND=kenburns`, `PYTHONPATH=/app` (or `.` for Railpack).
+   - Note the public URL (e.g. `https://….up.railway.app`).
+2. **Web (Vercel)** — import the GitHub repo, set **Root Directory** to `web`, then env:
+   - `WORKER_URL` = that Railway URL (no trailing slash)
+   - `WORKER_SECRET` = same secret as the worker  
+   Redeploy after saving env vars.
+3. Open the Vercel URL → paste a storyline → download when `ready`.
+
+If Vercel still says it cannot reach the worker, `WORKER_URL` is wrong or still set to localhost.
 
 ## Costs
 

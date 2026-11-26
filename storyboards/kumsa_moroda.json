@@ -1,0 +1,143 @@
+{
+  "title": "Kumsa Moroda",
+  "logline": "A short remembrance of Kumsa Moroda, the Oromo leader of Nekemte, whose wisdom and courage still shape how a family speaks of home.",
+  "language": "om",
+  "subtitle_language": "en",
+  "audience": "Oromo family and friends in Ethiopia and the diaspora who want a short, shareable film about a name they honour.",
+  "intent": "Feel pride and closeness to Oromo history; understand Kumsa Moroda as a leader of place, people, and memory—not only a name in a book.",
+  "style_block": "warm grainy hand-painted look, soft highland light, muted greens and earth ochres, gentle film grain, no text in image, consistent character face",
+  "character": {
+    "name": "Kumsa Moroda",
+    "description": "Oromo leader in his middle years, dignified bearing, dark beard lightly greying, wrapped in a patterned gabi, calm steady eyes, standing among Welega highland hills",
+    "reference_image": null
+  },
+  "tts": {
+    "voice": "Kore",
+    "style": "calm, warm, proud, unhurried"
+  },
+  "music": {
+    "caption": "gentle instrumental underscore, soft plucked strings and warm pads, slow heartbeat rhythm, highland nostalgia, hopeful resolve, no vocals",
+    "duration_sec": 75,
+    "tempo_bpm": 70,
+    "instrumental": true,
+    "cues": [
+      { "at_sec": 0, "note": "quiet bed under opening hills" },
+      { "at_sec": 40, "note": "slight lift as leadership and people appear" },
+      { "at_sec": 68, "note": "resolve to soft fade" }
+    ]
+  },
+  "end_card": {
+    "text": "Made with AI · Kumsa Moroda",
+    "duration_sec": 3
+  },
+  "shots": [
+    {
+      "id": "shot_01",
+      "duration_sec": 7,
+      "reason": "Establish Welega / Nekemte highland place before we meet him.",
+      "shot_size": "extreme_wide",
+      "image_prompt": "Wide highland hills of Welega Ethiopia at golden hour, paths toward a distant town, soft mist in valleys, warm light",
+      "motion_prompt": "slow gentle camera push-in over the hills, soft mist drifting",
+      "narration": "Gaafa ganama, tulluuwwan Wallaggaa ni dammaqsu.",
+      "narration_en": "At dawn, the hills of Welega wake first.",
+      "seed": 201,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_02",
+      "duration_sec": 7,
+      "reason": "Introduce Kumsa Moroda as the film's heart.",
+      "shot_size": "medium",
+      "image_prompt": "Kumsa Moroda standing on a hillside wrapped in a patterned gabi, calm steady eyes, soft highland wind, warm light",
+      "motion_prompt": "he slowly turns his head toward the valley, camera holds gently",
+      "narration": "Maqaan isaa Kumsaa Moorodaa—hogganaa Naqamtee.",
+      "narration_en": "His name is Kumsa Moroda—leader of Nekemte.",
+      "seed": 202,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_03",
+      "duration_sec": 6,
+      "reason": "Show leadership as care for people and land.",
+      "shot_size": "wide",
+      "image_prompt": "Oromo leader walking among farmers on a highland path, baskets and fields, respectful gathering, soft daylight",
+      "motion_prompt": "slow tracking beside him as people greet him gently",
+      "narration": "Inni lafa qofa hin hogganu; ummata isaa waliin jira.",
+      "narration_en": "He did not lead land alone; he walked with his people.",
+      "seed": 203,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_04",
+      "duration_sec": 6,
+      "reason": "Intimate detail—hands and gabi as inheritance motif.",
+      "shot_size": "close_up",
+      "image_prompt": "close-up of weathered hands adjusting a patterned gabi cloth, shallow depth of field, warm rim light",
+      "motion_prompt": "subtle handheld breath, fingers settle the cloth",
+      "narration": "Harka isaa seenaa qabata—dhaalaa fi abdii.",
+      "narration_en": "His hands hold history—inheritance and hope.",
+      "seed": 204,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_05",
+      "duration_sec": 7,
+      "reason": "Council / gathering as wisdom and voice of community.",
+      "shot_size": "medium",
+      "image_prompt": "evening gathering under a large tree, elders seated in a circle, Kumsa Moroda listening then speaking calmly, warm firelight edge",
+      "motion_prompt": "gentle push-in toward the circle, soft fire flicker",
+      "narration": "Yeroo marii, sagaleen isaa nagaafi of-eeggannoo qaba.",
+      "narration_en": "In council, his voice carried peace and careful strength.",
+      "seed": 205,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_06",
+      "duration_sec": 6,
+      "reason": "Nekemte as living place tied to his name.",
+      "shot_size": "wide",
+      "image_prompt": "historic highland town lanes of Nekemte at soft dusk, people walking home, warm windows, hills beyond",
+      "motion_prompt": "slow pan across the town toward the hills",
+      "narration": "Naqamteen maqaa isaa hin irraanfatu.",
+      "narration_en": "Nekemte does not forget his name.",
+      "seed": 206,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_07",
+      "duration_sec": 6,
+      "reason": "Memory reaches the next generation.",
+      "shot_size": "medium_close",
+      "image_prompt": "young person listening to an elder tell a story beside a window, soft lamp light, quiet home interior, highland night outside",
+      "motion_prompt": "very slow drift toward their faces, intimate stillness",
+      "narration": "Ijoolleen keenya ammallee seenaa isaa dhagahu.",
+      "narration_en": "Our children still hear his story.",
+      "seed": 207,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_08",
+      "duration_sec": 7,
+      "reason": "Close on pride and belonging for the audience.",
+      "shot_size": "medium",
+      "image_prompt": "silhouette of Kumsa Moroda on a ridge at dusk, Welega hills behind him, warm afterglow sky",
+      "motion_prompt": "slow pull-back revealing the hills, he stands calmly",
+      "narration": "Maqaan isaa ammas karaa keenya irratti nu qajeelcha.",
+      "narration_en": "His name still guides us on the road home.",
+      "seed": 208,
+      "shot_backend": null
+    },
+    {
+      "id": "shot_09",
+      "duration_sec": 6,
+      "reason": "Final motif—cloth and land as living inheritance.",
+      "shot_size": "close_up",
+      "image_prompt": "folded patterned gabi on a wooden stool beside an open window looking onto green highland fields, quiet morning light",
+      "motion_prompt": "slow Ken Burns style drift across cloth toward the window view",
+      "narration": "Seenaan isaa kan keenya.",
+      "narration_en": "His story is ours.",
+      "seed": 209,
+      "shot_backend": "kenburns"
+    }
+  ]
+}

@@ -14,9 +14,12 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from pipeline import assemble, config, keyframes, music, narration, script, shots
-from pipeline.common import write_json
+from pipeline.common import load_storyboard, write_json
 
 app = FastAPI(title="Heritage Short Worker", version="0.1.0")
+
+# Fixed root so status paths never move when OUTPUT_DIR is swapped per job
+JOBS_ROOT = config.ROOT / "outputs" / "jobs"
 
 
 class JobRequest(BaseModel):
@@ -36,7 +39,7 @@ class JobStatus(BaseModel):
 
 
 def _job_dir(job_id: str) -> Path:
-    d = config.OUTPUT_DIR / "jobs" / job_id
+    d = JOBS_ROOT / job_id
     d.mkdir(parents=True, exist_ok=True)
     return d
 
@@ -57,20 +60,34 @@ def _set_status(job_id: str, **fields: Any) -> dict[str, Any]:
     return data
 
 
+def _storyboard_for_job(body: JobRequest, sb_path: Path) -> None:
+    """Draft with Gemini, or fall back to repo storyboard when no API key."""
+    if body.storyboard:
+        write_json(sb_path, body.storyboard)
+        return
+    if config.GEMINI_API_KEY:
+        data = script.draft_from_storyline(body.storyline, body.language)
+        write_json(sb_path, data)
+        return
+
+    # Demo path without Gemini: reuse committed heritage storyboard
+    data = load_storyboard(config.STORYBOARD_PATH)
+    data["logline"] = body.storyline[:280]
+    data["language"] = body.language
+    write_json(sb_path, data)
+
+
 def _run_job(job_id: str, body: JobRequest) -> None:
     job_dir = _job_dir(job_id)
+    out_dir = job_dir / "outputs"
     original_out = config.OUTPUT_DIR
     try:
-        config.OUTPUT_DIR = job_dir / "outputs"
+        _set_status(job_id, status="running", stage="script", error=None)
+        config.OUTPUT_DIR = out_dir
         config.ensure_dirs()
         sb_path = job_dir / "storyboard.json"
 
-        _set_status(job_id, status="running", stage="script", error=None)
-        if body.storyboard:
-            write_json(sb_path, body.storyboard)
-        else:
-            data = script.draft_from_storyline(body.storyline, body.language)
-            write_json(sb_path, data)
+        _storyboard_for_job(body, sb_path)
 
         _set_status(job_id, stage="narration")
         narration.run(sb_path)
@@ -100,7 +117,7 @@ def _run_job(job_id: str, body: JobRequest) -> None:
             horizontal_path=str(h),
         )
     except Exception as exc:  # noqa: BLE001
-        _set_status(job_id, status="failed", error=str(exc))
+        _set_status(job_id, status="failed", error=str(exc), stage="failed")
     finally:
         config.OUTPUT_DIR = original_out
 
@@ -157,9 +174,12 @@ def download(
 
 
 def main() -> None:
+    import os
+
     import uvicorn
 
-    uvicorn.run("pipeline.worker:app", host="0.0.0.0", port=8080, reload=False)
+    port = int(os.getenv("PORT", "8080"))
+    uvicorn.run("pipeline.worker:app", host="0.0.0.0", port=port, reload=False)
 
 
 if __name__ == "__main__":

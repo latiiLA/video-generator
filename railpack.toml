@@ -1,0 +1,7 @@
+# Used if Railway builds with Railpack instead of Docker.
+[deploy]
+startCommand = "uvicorn pipeline.worker:app --host 0.0.0.0 --port ${PORT:-8080}"
+
+[build]
+# FFmpeg is required for Ken Burns + assemble. Prefer Dockerfile when possible.
+aptPackages = ["ffmpeg"]

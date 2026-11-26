@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { workerConfig } from "@/lib/worker";
 
-const WORKER_URL = process.env.WORKER_URL || "http://localhost:8080";
-const WORKER_SECRET = process.env.WORKER_SECRET || "change-me";
+export const runtime = "nodejs";
+export const maxDuration = 30;
 
 export async function GET(
   _req: NextRequest,
@@ -9,6 +10,7 @@ export async function GET(
 ) {
   const { id } = await ctx.params;
   try {
+    const { url: WORKER_URL, secret: WORKER_SECRET } = workerConfig();
     const res = await fetch(`${WORKER_URL}/jobs/${id}`, {
       headers: { "X-Worker-Secret": WORKER_SECRET },
       cache: "no-store",

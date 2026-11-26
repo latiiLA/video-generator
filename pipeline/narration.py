@@ -1,8 +1,9 @@
-"""Stage: Gemini TTS narration per shot."""
+"""Stage: Gemini TTS narration per shot (Interactions API)."""
 
 from __future__ import annotations
 
 import argparse
+import base64
 import struct
 import sys
 import wave
@@ -16,7 +17,6 @@ from pipeline.common import (
     load_storyboard,
     log_run,
     timed,
-    with_retries,
 )
 
 
@@ -35,9 +35,16 @@ def _silent_wav(path: Path, duration_sec: float, sample_rate: int = 24000) -> No
     _write_wav_pcm16(path, pcm, sample_rate)
 
 
+def _tts_chain() -> list[str]:
+    chain: list[str] = []
+    for m in [config.GEMINI_TTS_MODEL, *config.GEMINI_TTS_FALLBACKS]:
+        if m and m not in chain:
+            chain.append(m)
+    return chain
+
+
 def synthesize_line(text: str, style: str, voice: str, out: Path) -> dict:
     if not config.GEMINI_API_KEY:
-        # Offline-friendly placeholder so assemble can be developed without keys
         approx = max(2.0, len(text.split()) / 2.2)
         _silent_wav(out, approx)
         log_run(
@@ -50,43 +57,87 @@ def synthesize_line(text: str, style: str, voice: str, out: Path) -> dict:
         return {"path": out, "placeholder": True}
 
     from google import genai
-    from google.genai import types
 
-    client = genai.Client(api_key=config.GEMINI_API_KEY)
-
-    def call():
-        return client.models.generate_content(
-            model="gemini-2.5-flash-preview-tts",
-            contents=f"{style}. Speak clearly:\n{text}",
-            config=types.GenerateContentConfig(
-                response_modalities=["AUDIO"],
-                speech_config=types.SpeechConfig(
-                    voice_config=types.VoiceConfig(
-                        prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=voice)
-                    )
-                ),
-            ),
-        )
-
-    response, latency = timed(lambda: with_retries(call))
-    inline = response.candidates[0].content.parts[0].inline_data
-    data = inline.data
-    # API may return raw PCM or WAV; write as WAV container if raw
-    if data[:4] == b"RIFF":
-        out.write_bytes(data)
-    else:
-        _write_wav_pcm16(out, data, 24000)
-
-    log_run(
-        stage="narration",
-        model="gemini-2.5-flash-preview-tts",
-        parameters={"voice": voice, "style": style, "chars": len(text)},
-        latency_ms=latency,
-        cost_usd=0.0,
-        success=True,
-        output_path=str(out),
+    client = genai.Client(
+        api_key=config.GEMINI_API_KEY,
+        http_options={"api_version": "v1beta"},
     )
-    return {"path": out, "placeholder": False}
+
+    last_err: Exception | None = None
+    for model in _tts_chain():
+        try:
+
+            def call(m: str = model):
+                return client.interactions.create(
+                    model=m,
+                    input=[
+                        {
+                            "type": "user_input",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": text,
+                                    "annotations": [
+                                        {
+                                            "type": "speech_metadata",
+                                            "style": style,
+                                        }
+                                    ],
+                                }
+                            ],
+                        }
+                    ],
+                    response_format={"type": "audio"},
+                    generation_config={
+                        "speech_config": [
+                            {"voice": voice},
+                        ]
+                    },
+                )
+
+            interaction, latency = timed(call)
+            audio_b64 = None
+            if getattr(interaction, "output_audio", None) is not None:
+                audio_b64 = getattr(interaction.output_audio, "data", None)
+            if not audio_b64:
+                # Fallback: walk steps for audio content
+                for step in getattr(interaction, "steps", []) or []:
+                    for part in getattr(step, "content", []) or []:
+                        data = getattr(part, "data", None)
+                        if data:
+                            audio_b64 = data
+                            break
+            if not audio_b64:
+                raise RuntimeError(f"No audio in TTS response: {interaction}")
+
+            raw = base64.b64decode(audio_b64)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            if raw[:4] == b"RIFF":
+                out.write_bytes(raw)
+            else:
+                _write_wav_pcm16(out, raw, 24000)
+
+            log_run(
+                stage="narration",
+                model=model,
+                parameters={"voice": voice, "style": style, "chars": len(text)},
+                latency_ms=latency,
+                cost_usd=0.0,
+                success=True,
+                output_path=str(out),
+            )
+            return {"path": out, "placeholder": False}
+        except Exception as exc:  # noqa: BLE001
+            last_err = exc
+            log_run(stage="narration", model=model, success=False, error=str(exc))
+            msg = str(exc).lower()
+            if not any(
+                s in msg
+                for s in ("503", "429", "unavailable", "high demand", "400", "invalid")
+            ):
+                raise
+
+    raise RuntimeError(f"All Gemini TTS models failed: {last_err}")
 
 
 def run(storyboard_path: Path | None = None, force: bool = False) -> list[Path]:
@@ -97,7 +148,9 @@ def run(storyboard_path: Path | None = None, force: bool = False) -> list[Path]:
     outs: list[Path] = []
 
     for shot in sb["shots"]:
-        key = content_hash(shot["id"], shot["narration"], voice, style, config.TTS_BACKEND)
+        key = content_hash(
+            shot["id"], shot["narration"], voice, style, config.TTS_BACKEND, config.GEMINI_TTS_MODEL
+        )
         cached = cache_path("narration", f"{shot['id']}_{key}", ".wav")
         final = config.OUTPUT_DIR / "narration" / f"{shot['id']}.wav"
 

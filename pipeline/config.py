@@ -17,6 +17,25 @@ SCHEMA_PATH = ROOT / "schema" / "storyboard.schema.json"
 CACHE_DIR = ROOT / "cache"
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+# Prefer lighter free models first when Flash is overloaded (503)
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
+GEMINI_MODEL_FALLBACKS = [
+    m.strip()
+    for m in os.getenv(
+        "GEMINI_MODEL_FALLBACKS",
+        "gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3.6-flash,gemini-3.8-flash",
+    ).split(",")
+    if m.strip()
+]
+GEMINI_TTS_MODEL = os.getenv("GEMINI_TTS_MODEL", "gemini-3.8-flash-lite-tts")
+GEMINI_TTS_FALLBACKS = [
+    m.strip()
+    for m in os.getenv(
+        "GEMINI_TTS_FALLBACKS",
+        "gemini-3.8-flash-lite-tts,gemini-3.8-flash-tts",
+    ).split(",")
+    if m.strip()
+]
 CLOUDFLARE_ACCOUNT_ID = os.getenv("CLOUDFLARE_ACCOUNT_ID", "")
 CLOUDFLARE_API_TOKEN = os.getenv("CLOUDFLARE_API_TOKEN", "")
 IMAGE_MODEL = os.getenv(

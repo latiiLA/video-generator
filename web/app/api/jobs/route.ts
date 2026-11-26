@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { workerConfig } from "@/lib/worker";
 
-const WORKER_URL = process.env.WORKER_URL || "http://localhost:8080";
-const WORKER_SECRET = process.env.WORKER_SECRET || "change-me";
+export const runtime = "nodejs";
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   try {
+    const { url: WORKER_URL, secret: WORKER_SECRET } = workerConfig();
     const body = await req.json();
     const storyline = String(body.storyline || "").trim();
     const language = String(body.language || "am");
@@ -33,10 +35,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     return NextResponse.json(
       {
-        error:
-          err instanceof Error
-            ? `Cannot reach worker at ${WORKER_URL}: ${err.message}`
-            : "Worker unreachable",
+        error: err instanceof Error ? err.message : "Worker unreachable",
       },
       { status: 502 },
     );

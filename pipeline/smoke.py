@@ -55,15 +55,17 @@ def main() -> int:
             from google import genai
 
             client = genai.Client(api_key=config.GEMINI_API_KEY)
-            client.models.generate_content(model="gemini-2.0-flash", contents="Reply with OK")
+            client.models.generate_content(
+                model=config.GEMINI_MODEL, contents="Reply with OK"
+            )
             log_run(
                 stage="smoke",
-                model="gemini-2.0-flash",
+                model=config.GEMINI_MODEL,
                 latency_ms=(time.perf_counter() - t0) * 1000,
                 cost_usd=0.0,
                 success=True,
             )
-            print("OK gemini")
+            print("OK gemini:", config.GEMINI_MODEL)
         except Exception as exc:  # noqa: BLE001
             ok = False
             log_run(stage="smoke", model="gemini", success=False, error=str(exc))

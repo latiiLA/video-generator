@@ -53,30 +53,46 @@ def generate_flux(prompt: str, seed: int | None, out: Path) -> dict:
         f"{config.CLOUDFLARE_ACCOUNT_ID}/ai/run/{config.IMAGE_MODEL}"
     )
     headers = {"Authorization": f"Bearer {config.CLOUDFLARE_API_TOKEN}"}
-    body = {"prompt": prompt}
-    if seed is not None:
-        body["seed"] = seed
+    # Current Workers AI schema allows prompt + steps only (seed rejected with 400)
+    body = {"prompt": prompt[:2000], "steps": 4}
 
     def call():
-        r = requests.post(url, headers=headers, json=body, timeout=120)
-        r.raise_for_status()
+        r = requests.post(url, headers=headers, json=body, timeout=180)
+        if not r.ok:
+            raise RuntimeError(f"Cloudflare {r.status_code}: {r.text[:500]}")
         return r.content
 
     raw, latency = timed(lambda: with_retries(call))
-    # Workers AI may return raw image bytes or JSON with base64; handle raw image
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image_bytes: bytes | None = None
+    ctype = ""
     try:
-        Image.open(io.BytesIO(raw)).verify()
-        out.write_bytes(raw)
-    except Exception:
-        # JSON envelope
+        # Prefer JSON envelope used by Workers AI
         import base64
         import json
 
         payload = json.loads(raw.decode("utf-8"))
-        b64 = payload.get("result", {}).get("image") or payload.get("image")
-        if not b64:
-            raise RuntimeError(f"Unexpected Cloudflare response: {payload}")
-        out.write_bytes(base64.b64decode(b64))
+        if not payload.get("success", True) and payload.get("errors"):
+            raise RuntimeError(str(payload["errors"]))
+        b64 = (
+            (payload.get("result") or {}).get("image")
+            or payload.get("image")
+            or (payload.get("result") if isinstance(payload.get("result"), str) else None)
+        )
+        if b64:
+            image_bytes = base64.b64decode(b64)
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        image_bytes = raw
+
+    if not image_bytes:
+        raise RuntimeError("Cloudflare returned no image bytes")
+
+    # Normalize to PNG so Ken Burns always has a real picture
+    try:
+        img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        img.save(out, format="PNG")
+    except Exception:
+        out.write_bytes(image_bytes)
 
     log_run(
         stage="keyframes",

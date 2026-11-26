@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { workerConfig } from "@/lib/worker";
 
-const WORKER_URL = process.env.WORKER_URL || "http://localhost:8080";
-const WORKER_SECRET = process.env.WORKER_SECRET || "change-me";
+export const runtime = "nodejs";
+export const maxDuration = 60;
 
 export async function GET(
   req: NextRequest,
@@ -11,6 +12,7 @@ export async function GET(
   const aspect = req.nextUrl.searchParams.get("aspect") || "9x16";
 
   try {
+    const { url: WORKER_URL, secret: WORKER_SECRET } = workerConfig();
     const res = await fetch(
       `${WORKER_URL}/jobs/${id}/download?aspect=${encodeURIComponent(aspect)}`,
       {
