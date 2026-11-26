@@ -14,8 +14,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 from pipeline import assemble, config, keyframes, music, narration, script, shots
-from pipeline.common import load_storyboard, validate_storyboard, write_json
-from pipeline.script import _normalize_storyboard
+from pipeline.common import load_storyboard, normalize_storyboard, validate_storyboard, write_json
 
 app = FastAPI(title="Heritage Short Worker", version="0.1.0")
 
@@ -125,7 +124,7 @@ def _set_status(job_id: str, **fields: Any) -> dict[str, Any]:
 def _storyboard_for_job(body: JobRequest, sb_path: Path) -> None:
     """Draft with Gemini, or fall back to repo storyboard when no API key."""
     if body.storyboard:
-        data = _normalize_storyboard(dict(body.storyboard))
+        data = normalize_storyboard(dict(body.storyboard))
         validate_storyboard(data)
         write_json(sb_path, data)
         return
