@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { DEMO_STORYBOARD, DEMO_STORYLINE } from "@/lib/demoStoryboard";
 import { formatError } from "@/lib/errors";
 import { workerConfig } from "@/lib/worker";
 
@@ -33,6 +34,13 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Quick Test: always send the full demo storyboard + a ≥20-char storyline
+    // (older workers may still enforce min_length=20 on storyline).
+    if (demo && !storyboard) {
+      storyboard = { ...DEMO_STORYBOARD } as unknown as Record<string, unknown>;
+      storyline = DEMO_STORYLINE;
+    }
+
     if (!demo && !storyboard && storyline.length < 20) {
       return NextResponse.json(
         { error: "Storyline too short (or paste a full storyboard.json, or use Quick Test)" },
@@ -40,11 +48,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const resolvedStoryline =
+      storyline ||
+      String(
+        storyboard?.logline ||
+          storyboard?.title ||
+          (demo ? DEMO_STORYLINE : "storyboard-driven heritage short job"),
+      );
+
     const payload: Record<string, unknown> = {
       language: storyboard?.language || language,
-      storyline:
-        storyline ||
-        String(storyboard?.logline || storyboard?.title || (demo ? "5-second quick test" : "storyboard job")),
+      storyline: resolvedStoryline.length >= 20 ? resolvedStoryline : `${resolvedStoryline} — heritage short`,
       demo,
     };
     if (storyboard) payload.storyboard = storyboard;

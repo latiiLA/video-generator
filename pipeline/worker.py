@@ -14,7 +14,8 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 from pipeline import assemble, config, keyframes, music, narration, script, shots
-from pipeline.common import load_storyboard, write_json
+from pipeline.common import load_storyboard, validate_storyboard, write_json
+from pipeline.script import _normalize_storyboard
 
 app = FastAPI(title="Heritage Short Worker", version="0.1.0")
 
@@ -30,6 +31,8 @@ class JobRequest(BaseModel):
     Set ``demo=True`` for the ~5s UI quick-test storyboard.
     """
 
+    # No Field(min_length=…) — demo / storyboard jobs may send a short placeholder;
+    # length is enforced in the model validator only when neither demo nor storyboard is present.
     storyline: str | None = Field(default=None, max_length=20000)
     language: str = "en"
     job_id: str | None = None
@@ -47,6 +50,17 @@ class JobRequest(BaseModel):
 
     @model_validator(mode="after")
     def _coerce_storyboard_paste(self) -> JobRequest:
+        # Demo first so Quick Test never depends on storyline length.
+        if self.demo and self.storyboard is None:
+            demo_path = config.ROOT / "storyboards" / "demo_5s.json"
+            self.storyboard = json.loads(demo_path.read_text(encoding="utf-8"))
+            self.storyline = str(
+                self.storyboard.get("logline")
+                or self.storyboard.get("title")
+                or "5-second quick test film for the Heritage Short UI"
+            )
+            self.language = str(self.storyboard.get("language") or self.language or "en")
+
         # If the client pasted storyboard JSON into `storyline`, lift it into `storyboard`.
         if self.storyboard is None and self.storyline:
             text = self.storyline.strip()
@@ -63,16 +77,6 @@ class JobRequest(BaseModel):
                     if not self.language or self.language == "en":
                         self.language = str(parsed.get("language") or self.language or "en")
 
-        if self.demo and self.storyboard is None:
-            demo_path = config.ROOT / "storyboards" / "demo_5s.json"
-            self.storyboard = json.loads(demo_path.read_text(encoding="utf-8"))
-            self.storyline = str(
-                self.storyboard.get("logline")
-                or self.storyboard.get("title")
-                or "5-second quick test"
-            )
-            self.language = str(self.storyboard.get("language") or self.language or "en")
-
         if self.storyboard is None and (not self.storyline or len(self.storyline.strip()) < 20):
             raise ValueError(
                 "Provide a storyline (≥20 chars), demo=true, or a full storyboard object / JSON paste"
@@ -82,7 +86,7 @@ class JobRequest(BaseModel):
             self.storyline = str(
                 self.storyboard.get("logline")
                 or self.storyboard.get("title")
-                or "storyboard-driven job"
+                or "storyboard-driven heritage short job"
             )
         return self
 
@@ -121,16 +125,18 @@ def _set_status(job_id: str, **fields: Any) -> dict[str, Any]:
 def _storyboard_for_job(body: JobRequest, sb_path: Path) -> None:
     """Draft with Gemini, or fall back to repo storyboard when no API key."""
     if body.storyboard:
-        write_json(sb_path, body.storyboard)
+        data = _normalize_storyboard(dict(body.storyboard))
+        validate_storyboard(data)
+        write_json(sb_path, data)
         return
     if config.GEMINI_API_KEY:
-        data = script.draft_from_storyline(body.storyline, body.language)
+        data = script.draft_from_storyline(body.storyline or "", body.language)
         write_json(sb_path, data)
         return
 
-    # Demo path without Gemini: reuse committed heritage storyboard
+    # Offline path without Gemini: reuse committed heritage storyboard
     data = load_storyboard(config.STORYBOARD_PATH)
-    data["logline"] = body.storyline[:280]
+    data["logline"] = (body.storyline or "heritage short")[:280]
     data["language"] = body.language
     write_json(sb_path, data)
 
