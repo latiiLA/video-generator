@@ -1,0 +1,27 @@
+# Render Blueprint — deploy the Python film worker (not the Next.js app).
+# Dashboard: New → Blueprint → connect this GitHub repo.
+services:
+  - type: web
+    name: heritage-short-worker
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHONPATH
+        value: /app
+      - key: SHOT_BACKEND
+        value: kenburns
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite
+      - key: GEMINI_TTS_MODEL
+        value: gemini-3.8-flash-lite-tts
+      - key: WORKER_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: CLOUDFLARE_ACCOUNT_ID
+        sync: false
+      - key: CLOUDFLARE_API_TOKEN
+        sync: false

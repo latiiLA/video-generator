@@ -73,20 +73,25 @@ WORKER_SECRET=change-me
 
 Root `.env` (worker): `GEMINI_API_KEY`, Cloudflare keys, same `WORKER_SECRET`.
 
-### Deploy
+### Deploy (recommended: Render + Vercel)
 
-1. **Worker (Railway)** — deploy from **repo root** (not `web/`).
-   - Start command must be `python main.py` (do **not** put `${PORT:-8080}` in the Railway UI — clear any Custom Start Command so `railpack.json` / `Procfile` apply).
-   - Install/system: FFmpeg must be available (Dockerfile already installs it).
-   - Env vars: `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TTS_MODEL`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`, `WORKER_SECRET`, `SHOT_BACKEND=kenburns`, `PYTHONPATH=/app` (or `.` for Railpack).
-   - Note the public URL (e.g. `https://….up.railway.app`).
-2. **Web (Vercel)** — import the GitHub repo, set **Root Directory** to `web`, then env:
-   - `WORKER_URL` = that Railway URL (no trailing slash)
-   - `WORKER_SECRET` = same secret as the worker  
-   Redeploy after saving env vars.
-3. Open the Vercel URL → paste a storyline → download when `ready`.
+1. **Worker on Render** (Docker — avoids Railway Railpack issues)
+   - Go to [render.com](https://render.com) → **New** → **Blueprint** (uses `render.yaml`) **or** **Web Service** → connect `latiiLA/video-generator`
+   - Runtime: **Docker**, Dockerfile path `./Dockerfile`, root directory `/`
+   - Set env vars (same as local root `.env`):
+     - `GEMINI_API_KEY`
+     - `CLOUDFLARE_ACCOUNT_ID`
+     - `CLOUDFLARE_API_TOKEN`
+     - `WORKER_SECRET` (pick a strong value)
+     - optional: `SHOT_BACKEND=kenburns`
+   - After deploy, open `https://YOUR-SERVICE.onrender.com/health` → should show `{"status":"ok"}`
+2. **Web on Vercel** — Root Directory = `web`, env:
+   - `WORKER_URL=https://YOUR-SERVICE.onrender.com` (no trailing slash)
+   - `WORKER_SECRET=` same as Render  
+   Redeploy Vercel after saving.
+3. Generate a film on the Vercel URL.
 
-If Vercel still says it cannot reach the worker, `WORKER_URL` is wrong or still set to localhost.
+Note: free Render services spin down after idle; the first request may take ~30–60s to wake.
 
 ## Costs
 

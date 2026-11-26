@@ -13,6 +13,7 @@ COPY pipeline ./pipeline
 COPY schema ./schema
 COPY storyboard.json .
 COPY storyboards ./storyboards
+COPY main.py .
 
 ENV PYTHONPATH=/app
 ENV OUTPUT_DIR=/app/outputs
