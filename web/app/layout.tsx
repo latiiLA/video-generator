@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Heritage Short — Generate",
-  description: "Turn a family storyline into a short film, with a 5-second quick test on the first page",
+  title: "The Summer I Discovered Another World — Made by Lata Amenu",
+  description:
+    "Heritage short film by Lata Amenu: childhood countryside memory, AI pipeline, dual-aspect export, and in-browser playback.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="switchhub">{children}</body>
     </html>
   );
 }

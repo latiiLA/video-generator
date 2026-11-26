@@ -26,10 +26,14 @@ export async function GET(
     }
     const buf = await res.arrayBuffer();
     const filename = aspect === "16x9" ? "final_16x9.mp4" : "final_9x16.mp4";
+    const download = req.nextUrl.searchParams.get("download") === "1";
     return new NextResponse(buf, {
       headers: {
         "Content-Type": "video/mp4",
-        "Content-Disposition": `attachment; filename="${filename}"`,
+        "Cache-Control": "no-store",
+        "Content-Disposition": download
+          ? `attachment; filename="${filename}"`
+          : `inline; filename="${filename}"`,
       },
     });
   } catch (err) {

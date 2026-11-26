@@ -2,56 +2,42 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { formatError } from "@/lib/errors";
+import { FILM, PIPELINE_STAGES, SHOTS } from "@/lib/film";
 
 type Job = {
   id: string;
   status: string;
   stage?: string | null;
   error?: string | null;
-  vertical_url?: string | null;
-  horizontal_url?: string | null;
 };
 
+type Tab = "film" | "generate" | "storyboard" | "pipeline";
 type Mode = "demo" | "full";
-type Tab = "generate" | "pipeline" | "about";
-
-const STAGES = [
-  { id: "queued", label: "Queued" },
-  { id: "script", label: "Storyboard" },
-  { id: "narration", label: "Narration" },
-  { id: "keyframes", label: "Keyframes" },
-  { id: "shots", label: "Motion shots" },
-  { id: "music", label: "Score" },
-  { id: "assemble", label: "Assemble" },
-  { id: "done", label: "Ready" },
-] as const;
+type Aspect = "16x9" | "9x16";
 
 const DEFAULT_STORY = `I was in Grade Seven when I first visited my grandfather's home in the countryside.
 I thought it was only a visit. Endless greenery, summer rain, gojo nights, and fresh milk changed how I see ordinary moments.`;
 
 function stageIndex(stage?: string | null, status?: string | null): number {
-  if (status === "ready") return STAGES.length - 1;
-  if (status === "failed") {
-    const i = STAGES.findIndex((s) => s.id === stage);
-    return i >= 0 ? i : 0;
-  }
+  if (status === "ready") return PIPELINE_STAGES.length - 1;
   if (!stage || stage === "queued") return 0;
-  if (stage === "failed") return 0;
-  const i = STAGES.findIndex((s) => s.id === stage);
+  const i = PIPELINE_STAGES.findIndex((s) => s.id === stage);
   return i >= 0 ? i : 0;
 }
 
 export default function HomePage() {
-  const [tab, setTab] = useState<Tab>("generate");
+  const [tab, setTab] = useState<Tab>("film");
+  const [aspect, setAspect] = useState<Aspect>("16x9");
+  const [shotIdx, setShotIdx] = useState(0);
   const [mode, setMode] = useState<Mode>("demo");
   const [storyline, setStoryline] = useState(DEFAULT_STORY);
   const [language, setLanguage] = useState("en");
-  const [captionLanguage, setCaptionLanguage] = useState("am");
   const [job, setJob] = useState<Job | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [aspect, setAspect] = useState<"9x16" | "16x9">("16x9");
+  const [videoOk, setVideoOk] = useState(true);
 
+  const shot = SHOTS[shotIdx];
   const activeIdx = useMemo(
     () => stageIndex(job?.stage, job?.status),
     [job?.stage, job?.status],
@@ -59,9 +45,19 @@ export default function HomePage() {
   const progressPct = useMemo(() => {
     if (!job) return 0;
     if (job.status === "ready") return 100;
-    if (job.status === "failed") return Math.max(8, Math.round((activeIdx / (STAGES.length - 1)) * 100));
-    return Math.min(96, Math.round((activeIdx / (STAGES.length - 1)) * 100));
+    if (job.status === "failed") {
+      return Math.max(8, Math.round((activeIdx / (PIPELINE_STAGES.length - 1)) * 100));
+    }
+    return Math.min(96, Math.round((activeIdx / (PIPELINE_STAGES.length - 1)) * 100));
   }, [job, activeIdx]);
+
+  const showcaseSrc = `/api/media/film?aspect=${aspect}`;
+  const jobSrc = job?.status === "ready" ? `/api/jobs/${job.id}/download?aspect=${aspect}` : null;
+  const videoSrc = jobSrc || showcaseSrc;
+
+  useEffect(() => {
+    setVideoOk(true);
+  }, [videoSrc]);
 
   useEffect(() => {
     if (!job?.id || job.status === "ready" || job.status === "failed") return;
@@ -76,9 +72,8 @@ export default function HomePage() {
       setJob(data as Job);
       if (data.status === "ready" || data.status === "failed") {
         setBusy(false);
-        if (data.status === "failed") {
-          setError(formatError(data.error, "Job failed"));
-        }
+        if (data.status === "failed") setError(formatError(data.error, "Job failed"));
+        if (data.status === "ready") setTab("film");
       }
     }, 1800);
     return () => clearInterval(t);
@@ -94,14 +89,7 @@ export default function HomePage() {
       const payload =
         mode === "demo"
           ? { demo: true, language: "en" }
-          : {
-              demo: false,
-              storyline,
-              language,
-              // Worker currently uses storyboard language/subtitle fields when provided;
-              // for prose jobs language is narration language.
-            };
-
+          : { demo: false, storyline, language };
       const res = await fetch("/api/jobs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -125,305 +113,334 @@ export default function HomePage() {
       (storyline.trim().startsWith("{") && storyline.includes('"shots"')));
 
   return (
-    <div className="app-shell">
+    <div className="app">
       <aside className="sidebar">
-        <div className="brand-block">
-          <div className="brand-kicker">Heritage Short</div>
-          <h1 className="brand-title">Family story → short film</h1>
-          <p className="brand-sub">Generate on this page. Watch the pipeline move.</p>
+        <div className="side-brand">
+          <div className="kicker">{FILM.brand}</div>
+          <h1>{FILM.title}</h1>
+          <p>{FILM.place}</p>
+          <div className="side-meta">
+            <span>
+              By <strong>{FILM.author}</strong>
+            </span>
+            <span>{FILM.academy}</span>
+          </div>
         </div>
 
         <nav className="nav" aria-label="Primary">
-          <button
-            type="button"
-            className={`nav-btn ${tab === "generate" ? "active" : ""}`}
-            onClick={() => setTab("generate")}
-          >
-            <span className="nav-ico" aria-hidden>
-              ▶
-            </span>
-            Generate
-          </button>
-          <button
-            type="button"
-            className={`nav-btn ${tab === "pipeline" ? "active" : ""}`}
-            onClick={() => setTab("pipeline")}
-          >
-            <span className="nav-ico" aria-hidden>
-              ◆
-            </span>
-            Pipeline
-          </button>
-          <button
-            type="button"
-            className={`nav-btn ${tab === "about" ? "active" : ""}`}
-            onClick={() => setTab("about")}
-          >
-            <span className="nav-ico" aria-hidden>
-              ○
-            </span>
-            About
-          </button>
+          {(
+            [
+              ["film", "Film", "▶"],
+              ["generate", "Generate", "✦"],
+              ["storyboard", "Storyboard", "☰"],
+              ["pipeline", "Pipeline", "◇"],
+            ] as const
+          ).map(([id, label, ico]) => (
+            <button
+              key={id}
+              type="button"
+              className={tab === id ? "active" : ""}
+              onClick={() => setTab(id)}
+            >
+              <span className="ico" aria-hidden>
+                {ico}
+              </span>
+              {label}
+            </button>
+          ))}
         </nav>
 
-        <p className="sidebar-foot">
-          Default mode is a <strong>5-second quick test</strong> so you can verify the UI without a
-          full-length render.
-        </p>
+        <div className="side-foot">
+          <div className="by">{FILM.madeBy}</div>
+          <div>{FILM.madeWith}</div>
+        </div>
       </aside>
 
       <main className="workspace">
-        <section className="hero-panel">
-          <div className="chip-row">
-            <span className="chip">AI-generated film</span>
-            <span className="chip muted">storyboard.json contract</span>
+        <section className="hero">
+          <div className="chips">
+            <span className="chip">{FILM.badge}</span>
+            <span className="chip soft">{FILM.academy}</span>
+            <span className="chip soft">{FILM.madeBy}</span>
           </div>
-          <h2 className="hero-title">The Summer I Discovered Another World</h2>
-          <p className="hero-copy">
-            Share a childhood storyline—or run the built-in 5-second test. Narration, Ethiopian
-            highland visuals, score, Amharic captions, and dual-aspect export land here when ready.
-          </p>
+          <h2>{FILM.title}</h2>
+          <p className="synopsis">{FILM.synopsis}</p>
+          <div className="hero-actions">
+            <div className="aspect" role="group" aria-label="Aspect ratio">
+              <button
+                type="button"
+                className={aspect === "9x16" ? "active" : ""}
+                onClick={() => setAspect("9x16")}
+              >
+                Vertical 9:16
+              </button>
+              <button
+                type="button"
+                className={aspect === "16x9" ? "active" : ""}
+                onClick={() => setAspect("16x9")}
+              >
+                Horizontal 16:9
+              </button>
+            </div>
+            <button type="button" className="ghost" onClick={() => setTab("generate")}>
+              Generate new cut
+            </button>
+          </div>
         </section>
 
-        {tab === "generate" && (
-          <div className="grid-main">
+        {tab === "film" && (
+          <div className="layout-film">
             <section className="panel">
-              <h2>Generate</h2>
-              <p className="panel-lede">
-                Start with Quick Test to confirm the worker is alive, then switch to Full Film when
-                you want the complete story.
-              </p>
-
-              <div className="mode-toggle" role="tablist" aria-label="Generation mode">
-                <button
-                  type="button"
-                  className={`mode-btn ${mode === "demo" ? "active" : ""}`}
-                  onClick={() => setMode("demo")}
-                >
-                  <strong>Quick Test · 5s</strong>
-                  <span>Default. One shot, English male VO, Amharic captions.</span>
-                </button>
-                <button
-                  type="button"
-                  className={`mode-btn ${mode === "full" ? "active" : ""}`}
-                  onClick={() => setMode("full")}
-                >
-                  <strong>Full Film</strong>
-                  <span>Your storyline or pasted storyboard.json.</span>
-                </button>
-              </div>
-
-              <form className="generate-form" onSubmit={onSubmit}>
-                {mode === "full" && (
-                  <>
-                    <label className="field">
-                      Storyline
-                      <textarea
-                        value={storyline}
-                        onChange={(e) => setStoryline(e.target.value)}
-                        placeholder="The summer I spent at my grandfather's place…"
-                        required={mode === "full"}
-                      />
-                    </label>
-                    <p className="hint">
-                      Prose (≥20 characters) or paste a full <code>storyboard.json</code>.
-                    </p>
-                    <div className="row-2">
-                      <label className="field">
-                        Narration language
-                        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-                          <option value="en">English</option>
-                          <option value="am">Amharic</option>
-                          <option value="om">Afaan Oromo</option>
-                        </select>
-                      </label>
-                      <label className="field">
-                        Caption language
-                        <select
-                          value={captionLanguage}
-                          onChange={(e) => setCaptionLanguage(e.target.value)}
-                          disabled
-                        >
-                          <option value="am">Amharic</option>
-                        </select>
-                      </label>
+              <div className={`player-wrap ${aspect === "9x16" ? "vertical" : ""}`}>
+                {videoOk ? (
+                  <video
+                    key={videoSrc}
+                    src={videoSrc}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    onError={() => setVideoOk(false)}
+                  />
+                ) : (
+                  <div className="player-empty">
+                    <div>
+                      <strong>Film not loaded yet</strong>
+                      Run a Quick Test or Full Film from Generate, then come back here to watch.
                     </div>
-                    <p className="hint">
-                      Full films currently burn Amharic captions. Demo uses English narration +
-                      Amharic captions automatically.
-                    </p>
-                  </>
+                  </div>
                 )}
-
-                {mode === "demo" && (
-                  <p className="hint">
-                    Uses <code>storyboards/demo_5s.json</code> — about five seconds of picture and
-                    voice so you can test downloads quickly.
-                  </p>
-                )}
-
-                <div className="actions">
-                  <button type="submit" className="primary-btn" disabled={!canSubmit}>
-                    {busy
-                      ? mode === "demo"
-                        ? "Running 5s test…"
-                        : "Generating film…"
-                      : mode === "demo"
-                        ? "Run 5-second test"
-                        : "Generate film"}
-                  </button>
-                  {job?.status === "ready" && (
-                    <button
-                      type="button"
-                      className="ghost-btn"
-                      onClick={() => {
-                        setJob(null);
-                        setError(null);
-                      }}
-                    >
-                      Clear result
-                    </button>
-                  )}
+              </div>
+              <div className="player-bar">
+                <div className="cred">
+                  Watching {job?.status === "ready" ? `job ${job.id}` : "local showcase cut"} ·{" "}
+                  <b>{FILM.madeBy}</b>
                 </div>
-              </form>
-
-              {error && <div className="error-box">{error}</div>}
+                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                  <a className="link-btn" href={`${videoSrc}${videoSrc.includes("?") ? "&" : "?"}download=1`}>
+                    Download {aspect}
+                  </a>
+                  <a className="link-btn" href={`/api/media/film?aspect=16x9&download=1`}>
+                    16:9 file
+                  </a>
+                  <a className="link-btn" href={`/api/media/film?aspect=9x16&download=1`}>
+                    9:16 file
+                  </a>
+                </div>
+              </div>
             </section>
 
-            <section className="panel progress-panel">
-              <h2>Live progress</h2>
-              <div className="bar-track" aria-hidden>
-                <div className="bar-fill" style={{ width: `${progressPct}%` }} />
+            <section className="panel scene">
+              <h3>Scene chapters</h3>
+              <p className="lede">
+                Shot {shotIdx + 1} of {SHOTS.length} · bilingual memory beats from the storyboard.
+              </p>
+              <div className="shot-nav" aria-label="Jump to shot">
+                {SHOTS.map((s, i) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    className={i === shotIdx ? "active" : ""}
+                    onClick={() => setShotIdx(i)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
               </div>
-              <p className="job-meta">
+              <article className="shot-card">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/api/media/keyframe/${shot.id}`}
+                  alt={shot.label}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
+                />
+                <div className="shot-body">
+                  <div className="label">
+                    S{shotIdx + 1} · {shot.label}
+                  </div>
+                  <p className="am">{shot.narration_am}</p>
+                  <p className="en">{shot.narration_en}</p>
+                  <div className="shot-meta">
+                    <span>Camera: {shot.camera}</span>
+                    <span>Framing: {shot.framing}</span>
+                    <span>{shot.reason}</span>
+                  </div>
+                </div>
+              </article>
+            </section>
+          </div>
+        )}
+
+        {tab === "generate" && (
+          <section className="panel gen">
+            <h3>Generate on this page</h3>
+            <p className="lede">
+              Default is a 5-second Quick Test so you can verify the worker fast. Full Film uses your
+              storyline. English male narration + Amharic captions.
+            </p>
+
+            <div className="mode" role="tablist" aria-label="Mode">
+              <button
+                type="button"
+                className={mode === "demo" ? "active" : ""}
+                onClick={() => setMode("demo")}
+              >
+                <strong>Quick Test · 5s</strong>
+                <span>Default demo storyboard</span>
+              </button>
+              <button
+                type="button"
+                className={mode === "full" ? "active" : ""}
+                onClick={() => setMode("full")}
+              >
+                <strong>Full Film</strong>
+                <span>Your storyline or storyboard.json</span>
+              </button>
+            </div>
+
+            <form onSubmit={onSubmit}>
+              {mode === "full" && (
+                <>
+                  <label className="field">
+                    Storyline
+                    <textarea
+                      value={storyline}
+                      onChange={(e) => setStoryline(e.target.value)}
+                      required
+                    />
+                  </label>
+                  <p className="hint">Prose (≥20 chars) or paste full storyboard.json.</p>
+                  <label className="field">
+                    Narration language
+                    <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+                      <option value="en">English</option>
+                      <option value="am">Amharic</option>
+                      <option value="om">Afaan Oromo</option>
+                    </select>
+                  </label>
+                </>
+              )}
+              {mode === "demo" && (
+                <p className="hint">
+                  Uses <code>storyboards/demo_5s.json</code> — short English VO, Amharic captions.
+                </p>
+              )}
+              <button className="primary" type="submit" disabled={!canSubmit}>
+                {busy
+                  ? mode === "demo"
+                    ? "Running 5s test…"
+                    : "Generating…"
+                  : mode === "demo"
+                    ? "Run 5-second test"
+                    : "Generate film"}
+              </button>
+            </form>
+
+            {error && <div className="error">{error}</div>}
+
+            <div className="progress">
+              <div className="bar" aria-hidden>
+                <span style={{ width: `${progressPct}%` }} />
+              </div>
+              <p className="jobline">
                 {job ? (
                   <>
-                    Job <strong>{job.id}</strong> · {progressPct}% · status{" "}
-                    <strong>{job.status}</strong>
-                    {job.stage ? (
-                      <>
-                        {" "}
-                        · stage <strong>{job.stage}</strong>
-                      </>
-                    ) : null}
+                    Job <b>{job.id}</b> · {progressPct}% · {job.status}
+                    {job.stage ? ` · ${job.stage}` : ""}
                   </>
                 ) : (
                   "Waiting for a run. Quick Test is selected by default."
                 )}
               </p>
-
-              <div className="stage-list" style={{ marginTop: "1rem" }}>
-                {STAGES.map((stage, idx) => {
+              <div className="stages">
+                {PIPELINE_STAGES.map((stage, idx) => {
                   const failed = job?.status === "failed" && idx === activeIdx;
-                  const done =
-                    !!job &&
-                    !failed &&
-                    (job.status === "ready" || idx < activeIdx);
+                  const done = !!job && !failed && (job.status === "ready" || idx < activeIdx);
                   const active =
-                    !!job &&
-                    job.status !== "ready" &&
-                    job.status !== "failed" &&
-                    idx === activeIdx;
+                    !!job && job.status !== "ready" && job.status !== "failed" && idx === activeIdx;
                   const cls = failed ? "failed" : done ? "done" : active ? "active" : "";
                   return (
                     <div key={stage.id} className={`stage ${cls}`}>
-                      <span className="stage-dot" />
-                      <span className="stage-label">{stage.label}</span>
-                      <span className="stage-meta">
+                      <span className="dot" />
+                      <span>{stage.label}</span>
+                      <span style={{ color: "var(--muted)", fontSize: "0.75rem" }}>
                         {failed ? "failed" : done ? "done" : active ? "running" : "pending"}
                       </span>
                     </div>
                   );
                 })}
               </div>
-
               {job?.status === "ready" && (
-                <>
-                  <div className="aspect-toggle" role="group" aria-label="Download aspect">
-                    <button
-                      type="button"
-                      className={`aspect-btn ${aspect === "9x16" ? "active" : ""}`}
-                      onClick={() => setAspect("9x16")}
-                    >
-                      Vertical 9:16
-                    </button>
-                    <button
-                      type="button"
-                      className={`aspect-btn ${aspect === "16x9" ? "active" : ""}`}
-                      onClick={() => setAspect("16x9")}
-                    >
-                      Horizontal 16:9
-                    </button>
-                  </div>
-                  <div className="links">
-                    <a href={`/api/jobs/${job.id}/download?aspect=${aspect}`}>
-                      Download {aspect}
-                    </a>
-                    <a href={`/api/jobs/${job.id}/download?aspect=9x16`}>Also 9:16</a>
-                    <a href={`/api/jobs/${job.id}/download?aspect=16x9`}>Also 16:9</a>
-                  </div>
-                </>
+                <div style={{ marginTop: "0.9rem", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                  <button type="button" className="primary" onClick={() => setTab("film")}>
+                    Watch on Film tab
+                  </button>
+                  <a className="link-btn" href={`/api/jobs/${job.id}/download?aspect=16x9&download=1`}>
+                    Download 16:9
+                  </a>
+                  <a className="link-btn" href={`/api/jobs/${job.id}/download?aspect=9x16&download=1`}>
+                    Download 9:16
+                  </a>
+                </div>
               )}
-            </section>
-          </div>
+            </div>
+          </section>
+        )}
+
+        {tab === "storyboard" && (
+          <section className="panel scene">
+            <h3>Storyboard contract</h3>
+            <p className="lede">
+              Nine shots from grandfather&apos;s countryside—English narration lines with Amharic
+              captions. {FILM.madeBy}.
+            </p>
+            <div className="pipe-grid">
+              {SHOTS.map((s, i) => (
+                <article key={s.id} className="pipe-card">
+                  <h4>
+                    S{i + 1} · {s.label}
+                  </h4>
+                  <p>
+                    {s.reason} · {s.framing} · {s.camera}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
         )}
 
         {tab === "pipeline" && (
-          <section className="panel">
-            <h2>How the pipeline works</h2>
-            <p className="panel-lede">
-              One storyboard file is the contract. Each stage writes cached outputs, then FFmpeg
-              assembles dual-aspect films with ducked narration and burned-in captions.
+          <section className="panel pipe">
+            <h3>How the pipeline works</h3>
+            <p className="lede">
+              One storyboard file is the contract. Stages cache by hash, then FFmpeg builds dual-aspect
+              films with ducked narration and burned-in Amharic captions.
             </p>
-            <div className="pipeline-cards">
+            <div className="pipe-grid">
               <article className="pipe-card">
-                <h3>1. Storyboard contract</h3>
-                <p>Validated JSON defines shots, prompts, narration, music, and end card.</p>
+                <h4>1. Storyboard</h4>
+                <p>Validated JSON for shots, prompts, narration, music, and end card.</p>
               </article>
               <article className="pipe-card">
-                <h3>2. Generative stages</h3>
-                <p>Narration → keyframes → motion → music, with hash caching between runs.</p>
+                <h4>2. Generative stages</h4>
+                <p>Narration → keyframes → motion → music, with cache reuse.</p>
               </article>
               <article className="pipe-card">
-                <h3>3. FFmpeg assembly</h3>
-                <p>Native 9:16 and 16:9 timelines, loudnorm mix, Amharic captions, end card.</p>
+                <h4>3. Assembly</h4>
+                <p>Native 9:16 and 16:9 timelines, loudnorm mix, captions, end card.</p>
               </article>
               <article className="pipe-card">
-                <h3>4. UI quick test</h3>
-                <p>
-                  The Generate tab defaults to a ~5s demo so reviewers can exercise the full path
-                  without waiting for a long film.
-                </p>
+                <h4>4. Showcase UI</h4>
+                <p>Watch the cut here, browse scene chapters, then generate a new test or full film.</p>
               </article>
             </div>
           </section>
         )}
 
-        {tab === "about" && (
-          <section className="panel">
-            <h2>About this build</h2>
-            <p className="panel-lede">
-              Heritage Short turns a personal Ethiopian countryside memory into a labeled
-              AI-generated short. Visual prompts emphasize Horn of Africa features; the default
-              demo narrates in English with Amharic captions.
-            </p>
-            <div className="pipeline-cards">
-              <article className="pipe-card">
-                <h3>Outputs</h3>
-                <p>
-                  <code>final_9x16.mp4</code> and <code>final_16x9.mp4</code> from the same job.
-                </p>
-              </article>
-              <article className="pipe-card">
-                <h3>Worker</h3>
-                <p>
-                  Local or Railway FastAPI worker at <code>WORKER_URL</code>. Keep the worker
-                  running to test from this UI.
-                </p>
-              </article>
-            </div>
-          </section>
-        )}
+        <p className="footer-credit">
+          <b>{FILM.madeBy}</b> · {FILM.madeWith} · {FILM.place}
+        </p>
       </main>
     </div>
   );
